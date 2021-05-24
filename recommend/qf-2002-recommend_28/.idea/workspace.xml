@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7fb0b4e5-84b5-4263-afee-d15470808d1f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:/installed/apache-maven-3.6.1" />
+        <option name="userSettingsFile" value="D:\installed\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1jS8zDXAPHzwgTEchgIsi0GQqav" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/scala/com/qianfeng/recommend/transform" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend\transform" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend\udfs" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend\constant" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ALSCF">
+    <configuration name="ALSCF" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.ALSCF" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev -h hadoop01 -p 2181 -f /recommend/als -k 100 -t recommend:news-cf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DateUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.util.DateUtil" />
+      <module name="qf-2002-recommend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HBaseUtil" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.hbase.HBaseUtil" />
+      <module name="qf-2002-recommend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ItemCF" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.ItemCF" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev -h hadoop01 -p 2181 -f /recommend/itemcf -k 100 -t recommend:news-cf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RatingUDF" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.udfs.RatingUDF" />
+      <module name="qf-2002-recommend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.udfs.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.DateUtil" />
+      <item itemvalue="Application.HBaseUtil" />
+      <item itemvalue="Application.ItemCF" />
+      <item itemvalue="Application.RatingUDF" />
+      <item itemvalue="Application.ALSCF" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ALSCF" />
+        <item itemvalue="Application.ItemCF" />
+        <item itemvalue="Application.RatingUDF" />
+        <item itemvalue="Application.DateUtil" />
+        <item itemvalue="Application.HBaseUtil" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7fb0b4e5-84b5-4263-afee-d15470808d1f" name="Default Changelist" comment="" />
+      <created>1603786392825</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603786392825</updated>
+      <workItem from="1603786398241" duration="5912000" />
+      <workItem from="1603849107123" duration="18955000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="686" y="263" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1603873887162">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="686" y="263" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1603873887162" />
+    <state x="664" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603875534553">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="664" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1603875534553" />
+    <state width="1864" height="565" key="GridCell.Tab.0.bottom" timestamp="1603875468609">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="565" key="GridCell.Tab.0.bottom/0.0.1920.1032@0.0.1920.1032" timestamp="1603875468609" />
+    <state width="1864" height="565" key="GridCell.Tab.0.center" timestamp="1603875468609">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="565" key="GridCell.Tab.0.center/0.0.1920.1032@0.0.1920.1032" timestamp="1603875468609" />
+    <state width="1864" height="565" key="GridCell.Tab.0.left" timestamp="1603875468609">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="565" key="GridCell.Tab.0.left/0.0.1920.1032@0.0.1920.1032" timestamp="1603875468609" />
+    <state width="1864" height="565" key="GridCell.Tab.0.right" timestamp="1603875468609">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="565" key="GridCell.Tab.0.right/0.0.1920.1032@0.0.1920.1032" timestamp="1603875468609" />
+    <state x="0" y="0" key="SettingsEditor" timestamp="1603786657550">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="0" y="0" key="SettingsEditor/0.0.1920.1032@0.0.1920.1032" timestamp="1603786657550" />
+    <state x="574" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1603849106022">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="574" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1603849106022" />
+  </component>
+</project>

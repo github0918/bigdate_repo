@@ -1,0 +1,48 @@
+spring:
+  main:
+    lazy-initialization: false   # disable lazy
+  server:
+    port: 7088 # 端口
+    maxThreads: 500 # 最大线程数，这个值决定能并发处理的请求数据
+    acceptorThreadCount: 2 # 与CPU核心相等即可
+    acceptCount: 300 #accept队列中连接的个数达到acceptCount时,拒绝连接，返回connection refused
+    maxConnections: 15000 # 最大连接数，能够和tomcat建立的最大tcp连接数
+    connectionTimeout: 30000 # 超时时间 30s
+    protocol: org.apache.coyote.http11.Http11Nio2Protocol # 连接协议
+  datasource:
+    presto:
+      name: presto
+      driver-class-name: com.facebook.presto.jdbc.PrestoDriver
+      # presto 连接地址，注意更换为你自己的地址
+      jdbc-url: jdbc:presto://192.168.216.111:8082/hive
+      username: root
+      type: com.zaxxer.hikari.HikariDataSource
+      connection-timeout: 300
+      pool-name: hikari-pool-1
+      idle-timeout: 100
+
+    clickhouse:
+      name: clickhouse
+      driver-class-name: ru.yandex.clickhouse.ClickHouseDriver
+      jdbc-url: jdbc:clickhouse://192.168.216.111:8321/default
+      username: qf-insert
+      password: 123456
+      type: com.zaxxer.hikari.HikariDataSource
+      connection-timeout: 300
+      pool-name: hikari-pool-2
+      idle-timeout: 100
+
+  data:
+    milvus:
+      host: 192.168.216.111
+      port: 19530
+
+    hbase:
+      quorum: hadoop01:2181
+      rootDir: hdfs://hadoop01:9000/hbase
+      nodeParent: /hbase
+
+logging:
+  level:
+    # 调为DEBUG可以日志中考到执行的SQL
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG

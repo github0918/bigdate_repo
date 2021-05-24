@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7fb0b4e5-84b5-4263-afee-d15470808d1f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:/installed/apache-maven-3.6.1" />
+        <option name="userSettingsFile" value="D:\installed\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1jS8zDXAPHzwgTEchgIsi0GQqav" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../qf-2002-data-api" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend\transform" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\resources" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala" />
+      <recent name="E:\IDEAProjects1\qf-2002-recommend\src\main\scala\com\qianfeng\recommend\udfs" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.UnionFeature">
+    <configuration name="ArticleEmbedding" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.ArticleEmbedding" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev -h hadoop01 -p 2181 -t recommend:news-feature -f /recommend/articleembedding" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IrisLRClassify" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.IrisLRClassify" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LRClassify" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.LRClassify" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UnionFeature" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.UnionFeature" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev -h hadoop01 -p 2181 -t recommend:union-feature -f /recommend/union" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserBaseFeature" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.qianfeng.recommend.UserBaseFeature" />
+      <module name="qf-2002-recommend" />
+      <option name="PROGRAM_PARAMETERS" value="-e dev -h hadoop01 -p 2181 -t recommend:user-feature -f /recommend/userbase" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.qianfeng.recommend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.UserBaseFeature" />
+      <item itemvalue="Application.ArticleEmbedding" />
+      <item itemvalue="Application.LRClassify" />
+      <item itemvalue="Application.IrisLRClassify" />
+      <item itemvalue="Application.UnionFeature" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.UnionFeature" />
+        <item itemvalue="Application.LRClassify" />
+        <item itemvalue="Application.IrisLRClassify" />
+        <item itemvalue="Application.ArticleEmbedding" />
+        <item itemvalue="Application.UserBaseFeature" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7fb0b4e5-84b5-4263-afee-d15470808d1f" name="Default Changelist" comment="" />
+      <created>1603786392825</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603786392825</updated>
+      <workItem from="1603786398241" duration="5912000" />
+      <workItem from="1603849107123" duration="20175000" />
+      <workItem from="1603933298227" duration="13582000" />
+      <workItem from="1604019784423" duration="6382000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="686" y="263" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1603961456717">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="686" y="263" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1603961456717" />
+    <state x="664" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604029317051">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="664" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1604029317051" />
+    <state x="686" y="213" key="FileChooserDialogImpl" timestamp="1604039722736">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="686" y="213" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1604039722736" />
+    <state width="1864" height="249" key="GridCell.Tab.0.bottom" timestamp="1604039725128">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="249" key="GridCell.Tab.0.bottom/0.0.1920.1032@0.0.1920.1032" timestamp="1604039725128" />
+    <state width="1864" height="249" key="GridCell.Tab.0.center" timestamp="1604039725128">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="249" key="GridCell.Tab.0.center/0.0.1920.1032@0.0.1920.1032" timestamp="1604039725128" />
+    <state width="1864" height="249" key="GridCell.Tab.0.left" timestamp="1604039725128">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="249" key="GridCell.Tab.0.left/0.0.1920.1032@0.0.1920.1032" timestamp="1604039725128" />
+    <state width="1864" height="249" key="GridCell.Tab.0.right" timestamp="1604039725128">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state width="1864" height="249" key="GridCell.Tab.0.right/0.0.1920.1032@0.0.1920.1032" timestamp="1604039725128" />
+    <state x="0" y="0" key="SettingsEditor" timestamp="1603786657550">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="0" y="0" key="SettingsEditor/0.0.1920.1032@0.0.1920.1032" timestamp="1603786657550" />
+    <state x="574" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1604019787833">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="574" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1604019787833" />
+  </component>
+</project>

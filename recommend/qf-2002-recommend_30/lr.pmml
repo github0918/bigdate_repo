@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+    <Header>
+        <Application name="JPMML-SparkML" version="1.5.9"/>
+        <Timestamp>2020-10-30T02:11:55Z</Timestamp>
+    </Header>
+    <DataDictionary>
+        <DataField name="f1" optype="continuous" dataType="double"/>
+        <DataField name="f2" optype="continuous" dataType="double"/>
+        <DataField name="f3" optype="continuous" dataType="double"/>
+        <DataField name="f4" optype="continuous" dataType="double"/>
+        <DataField name="f5" optype="continuous" dataType="double"/>
+        <DataField name="f6" optype="continuous" dataType="double"/>
+        <DataField name="f7" optype="continuous" dataType="double"/>
+        <DataField name="f9" optype="continuous" dataType="double"/>
+        <DataField name="f10" optype="continuous" dataType="double"/>
+        <DataField name="f11" optype="continuous" dataType="double"/>
+        <DataField name="f12" optype="continuous" dataType="double"/>
+        <DataField name="f13" optype="continuous" dataType="double"/>
+        <DataField name="f14" optype="continuous" dataType="double"/>
+        <DataField name="f15" optype="continuous" dataType="double"/>
+        <DataField name="f16" optype="continuous" dataType="double"/>
+        <DataField name="f17" optype="continuous" dataType="double"/>
+        <DataField name="f18" optype="continuous" dataType="double"/>
+        <DataField name="f19" optype="continuous" dataType="double"/>
+        <DataField name="f20" optype="continuous" dataType="double"/>
+        <DataField name="f22" optype="continuous" dataType="double"/>
+        <DataField name="f23" optype="continuous" dataType="double"/>
+        <DataField name="f24" optype="continuous" dataType="double"/>
+        <DataField name="f25" optype="continuous" dataType="double"/>
+        <DataField name="f27" optype="continuous" dataType="double"/>
+        <DataField name="f29" optype="continuous" dataType="double"/>
+        <DataField name="f31" optype="continuous" dataType="double"/>
+        <DataField name="f32" optype="continuous" dataType="double"/>
+        <DataField name="f33" optype="continuous" dataType="double"/>
+        <DataField name="f34" optype="continuous" dataType="double"/>
+        <DataField name="f35" optype="continuous" dataType="double"/>
+        <DataField name="f36" optype="continuous" dataType="double"/>
+        <DataField name="f37" optype="continuous" dataType="double"/>
+        <DataField name="f38" optype="continuous" dataType="double"/>
+        <DataField name="f39" optype="continuous" dataType="double"/>
+        <DataField name="f40" optype="continuous" dataType="double"/>
+        <DataField name="f41" optype="continuous" dataType="double"/>
+        <DataField name="f42" optype="continuous" dataType="double"/>
+        <DataField name="f43" optype="continuous" dataType="double"/>
+        <DataField name="f44" optype="continuous" dataType="double"/>
+        <DataField name="f45" optype="continuous" dataType="double"/>
+        <DataField name="f46" optype="continuous" dataType="double"/>
+        <DataField name="f47" optype="continuous" dataType="double"/>
+        <DataField name="f48" optype="continuous" dataType="double"/>
+        <DataField name="f49" optype="continuous" dataType="double"/>
+        <DataField name="f50" optype="continuous" dataType="double"/>
+        <DataField name="f51" optype="continuous" dataType="double"/>
+        <DataField name="f52" optype="continuous" dataType="double"/>
+        <DataField name="f53" optype="continuous" dataType="double"/>
+        <DataField name="f54" optype="continuous" dataType="double"/>
+        <DataField name="f55" optype="continuous" dataType="double"/>
+        <DataField name="f56" optype="continuous" dataType="double"/>
+        <DataField name="f57" optype="continuous" dataType="double"/>
+        <DataField name="f58" optype="continuous" dataType="double"/>
+        <DataField name="f59" optype="continuous" dataType="double"/>
+        <DataField name="f60" optype="continuous" dataType="double"/>
+        <DataField name="f61" optype="continuous" dataType="double"/>
+        <DataField name="f62" optype="continuous" dataType="double"/>
+        <DataField name="f63" optype="continuous" dataType="double"/>
+        <DataField name="f64" optype="continuous" dataType="double"/>
+        <DataField name="f65" optype="continuous" dataType="double"/>
+        <DataField name="f66" optype="continuous" dataType="double"/>
+        <DataField name="f67" optype="continuous" dataType="double"/>
+        <DataField name="f68" optype="continuous" dataType="double"/>
+        <DataField name="f69" optype="continuous" dataType="double"/>
+        <DataField name="f70" optype="continuous" dataType="double"/>
+        <DataField name="f71" optype="continuous" dataType="double"/>
+        <DataField name="f72" optype="continuous" dataType="double"/>
+        <DataField name="f73" optype="continuous" dataType="double"/>
+        <DataField name="f74" optype="continuous" dataType="double"/>
+        <DataField name="f75" optype="continuous" dataType="double"/>
+        <DataField name="f76" optype="continuous" dataType="double"/>
+        <DataField name="f77" optype="continuous" dataType="double"/>
+        <DataField name="f78" optype="continuous" dataType="double"/>
+        <DataField name="f79" optype="continuous" dataType="double"/>
+        <DataField name="f80" optype="continuous" dataType="double"/>
+        <DataField name="f81" optype="continuous" dataType="double"/>
+        <DataField name="f82" optype="continuous" dataType="double"/>
+        <DataField name="f83" optype="continuous" dataType="double"/>
+        <DataField name="f84" optype="continuous" dataType="double"/>
+        <DataField name="f85" optype="continuous" dataType="double"/>
+        <DataField name="f86" optype="continuous" dataType="double"/>
+        <DataField name="f87" optype="continuous" dataType="double"/>
+        <DataField name="f88" optype="continuous" dataType="double"/>
+        <DataField name="f89" optype="continuous" dataType="double"/>
+        <DataField name="f90" optype="continuous" dataType="double"/>
+        <DataField name="f91" optype="continuous" dataType="double"/>
+        <DataField name="f92" optype="continuous" dataType="double"/>
+        <DataField name="f93" optype="continuous" dataType="double"/>
+        <DataField name="f94" optype="continuous" dataType="double"/>
+        <DataField name="label" optype="categorical" dataType="integer">
+            <Value value="0"/>
+            <Value value="1"/>
+        </DataField>
+    </DataDictionary>
+    <TransformationDictionary/>
+    <RegressionModel functionName="classification" normalizationMethod="logit">
+        <MiningSchema>
+            <MiningField name="label" usageType="target"/>
+            <MiningField name="f1"/>
+            <MiningField name="f2"/>
+            <MiningField name="f3"/>
+            <MiningField name="f4"/>
+            <MiningField name="f5"/>
+            <MiningField name="f6"/>
+            <MiningField name="f7"/>
+            <MiningField name="f9"/>
+            <MiningField name="f10"/>
+            <MiningField name="f11"/>
+            <MiningField name="f12"/>
+            <MiningField name="f13"/>
+            <MiningField name="f14"/>
+            <MiningField name="f15"/>
+            <MiningField name="f16"/>
+            <MiningField name="f17"/>
+            <MiningField name="f18"/>
+            <MiningField name="f19"/>
+            <MiningField name="f20"/>
+            <MiningField name="f22"/>
+            <MiningField name="f23"/>
+            <MiningField name="f24"/>
+            <MiningField name="f25"/>
+            <MiningField name="f27"/>
+            <MiningField name="f29"/>
+            <MiningField name="f31"/>
+            <MiningField name="f32"/>
+            <MiningField name="f33"/>
+            <MiningField name="f34"/>
+            <MiningField name="f35"/>
+            <MiningField name="f36"/>
+            <MiningField name="f37"/>
+            <MiningField name="f38"/>
+            <MiningField name="f39"/>
+            <MiningField name="f40"/>
+            <MiningField name="f41"/>
+            <MiningField name="f42"/>
+            <MiningField name="f43"/>
+            <MiningField name="f44"/>
+            <MiningField name="f45"/>
+            <MiningField name="f46"/>
+            <MiningField name="f47"/>
+            <MiningField name="f48"/>
+            <MiningField name="f49"/>
+            <MiningField name="f50"/>
+            <MiningField name="f51"/>
+            <MiningField name="f52"/>
+            <MiningField name="f53"/>
+            <MiningField name="f54"/>
+            <MiningField name="f55"/>
+            <MiningField name="f56"/>
+            <MiningField name="f57"/>
+            <MiningField name="f58"/>
+            <MiningField name="f59"/>
+            <MiningField name="f60"/>
+            <MiningField name="f61"/>
+            <MiningField name="f62"/>
+            <MiningField name="f63"/>
+            <MiningField name="f64"/>
+            <MiningField name="f65"/>
+            <MiningField name="f66"/>
+            <MiningField name="f67"/>
+            <MiningField name="f68"/>
+            <MiningField name="f69"/>
+            <MiningField name="f70"/>
+            <MiningField name="f71"/>
+            <MiningField name="f72"/>
+            <MiningField name="f73"/>
+            <MiningField name="f74"/>
+            <MiningField name="f75"/>
+            <MiningField name="f76"/>
+            <MiningField name="f77"/>
+            <MiningField name="f78"/>
+            <MiningField name="f79"/>
+            <MiningField name="f80"/>
+            <MiningField name="f81"/>
+            <MiningField name="f82"/>
+            <MiningField name="f83"/>
+            <MiningField name="f84"/>
+            <MiningField name="f85"/>
+            <MiningField name="f86"/>
+            <MiningField name="f87"/>
+            <MiningField name="f88"/>
+            <MiningField name="f89"/>
+            <MiningField name="f90"/>
+            <MiningField name="f91"/>
+            <MiningField name="f92"/>
+            <MiningField name="f93"/>
+            <MiningField name="f94"/>
+        </MiningSchema>
+        <Output>
+            <OutputField name="pmml(prediction)" optype="categorical" dataType="integer" isFinalResult="false"/>
+            <OutputField name="prediction" optype="continuous" dataType="double" feature="transformedValue">
+                <MapValues outputColumn="data:output" dataType="double">
+                    <FieldColumnPair field="pmml(prediction)" column="data:input"/>
+                    <InlineTable>
+                        <row>
+                            <data:input>0</data:input>
+                            <data:output>0</data:output>
+                        </row>
+                        <row>
+                            <data:input>1</data:input>
+                            <data:output>1</data:output>
+                        </row>
+                    </InlineTable>
+                </MapValues>
+            </OutputField>
+            <OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
+            <OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
+        </Output>
+        <RegressionTable intercept="-0.8462528025395476" targetCategory="1">
+            <NumericPredictor name="f1" coefficient="-19.24353158820156"/>
+            <NumericPredictor name="f2" coefficient="-11.44512694405954"/>
+            <NumericPredictor name="f3" coefficient="-5.685183233543514"/>
+            <NumericPredictor name="f4" coefficient="-7.43870163763935"/>
+            <NumericPredictor name="f5" coefficient="-3.068462624449105"/>
+            <NumericPredictor name="f6" coefficient="-4.485191624908888"/>
+            <NumericPredictor name="f7" coefficient="-58.16490100583816"/>
+            <NumericPredictor name="f9" coefficient="25.957529427299995"/>
+            <NumericPredictor name="f10" coefficient="27.443156845784383"/>
+            <NumericPredictor name="f11" coefficient="-5.183540128217461"/>
+            <NumericPredictor name="f12" coefficient="-37.543554847203865"/>
+            <NumericPredictor name="f13" coefficient="4.780818507686239"/>
+            <NumericPredictor name="f14" coefficient="21.91977325343028"/>
+            <NumericPredictor name="f15" coefficient="-10.268907231104292"/>
+            <NumericPredictor name="f16" coefficient="36.2397673591876"/>
+            <NumericPredictor name="f17" coefficient="7.839913898927898"/>
+            <NumericPredictor name="f18" coefficient="1.3353144965617163"/>
+            <NumericPredictor name="f19" coefficient="-14.785935419099573"/>
+            <NumericPredictor name="f20" coefficient="9.724574955185991"/>
+            <NumericPredictor name="f22" coefficient="-11.0506154080593"/>
+            <NumericPredictor name="f23" coefficient="23.539116741861687"/>
+            <NumericPredictor name="f24" coefficient="15.472798862857694"/>
+            <NumericPredictor name="f25" coefficient="-8.817459549009367"/>
+            <NumericPredictor name="f27" coefficient="-14.376237894448987"/>
+            <NumericPredictor name="f29" coefficient="-19.16458917655119"/>
+            <NumericPredictor name="f31" coefficient="3.923716396020346"/>
+            <NumericPredictor name="f32" coefficient="5.203543814165"/>
+            <NumericPredictor name="f33" coefficient="-1.5222272495408273"/>
+            <NumericPredictor name="f34" coefficient="22.32557928510904"/>
+            <NumericPredictor name="f35" coefficient="-4.850645746242527"/>
+            <NumericPredictor name="f36" coefficient="11.064130093728984"/>
+            <NumericPredictor name="f37" coefficient="17.159813356707343"/>
+            <NumericPredictor name="f38" coefficient="-36.09415119134884"/>
+            <NumericPredictor name="f39" coefficient="-6.192835564735131"/>
+            <NumericPredictor name="f40" coefficient="-8.629581102299698"/>
+            <NumericPredictor name="f41" coefficient="21.53094567294712"/>
+            <NumericPredictor name="f42" coefficient="37.84572206300159"/>
+            <NumericPredictor name="f43" coefficient="-16.377828162995684"/>
+            <NumericPredictor name="f44" coefficient="-22.66753295269293"/>
+            <NumericPredictor name="f45" coefficient="-8.5135838117033"/>
+            <NumericPredictor name="f46" coefficient="24.210350607667564"/>
+            <NumericPredictor name="f47" coefficient="11.617987802679961"/>
+            <NumericPredictor name="f48" coefficient="-45.000701342987576"/>
+            <NumericPredictor name="f49" coefficient="-27.67166184487648"/>
+            <NumericPredictor name="f50" coefficient="6.097736666562487"/>
+            <NumericPredictor name="f51" coefficient="7.24416573518824"/>
+            <NumericPredictor name="f52" coefficient="1.471979253872223"/>
+            <NumericPredictor name="f53" coefficient="37.13939081949239"/>
+            <NumericPredictor name="f54" coefficient="-3.2511869443289836"/>
+            <NumericPredictor name="f55" coefficient="10.678499847335612"/>
+            <NumericPredictor name="f56" coefficient="2.5638912556372544"/>
+            <NumericPredictor name="f57" coefficient="36.610883938830895"/>
+            <NumericPredictor name="f58" coefficient="48.95341556301695"/>
+            <NumericPredictor name="f59" coefficient="40.02787792083192"/>
+            <NumericPredictor name="f60" coefficient="14.007055086135924"/>
+            <NumericPredictor name="f61" coefficient="-2.303942084768609"/>
+            <NumericPredictor name="f62" coefficient="-1.4210235172331112"/>
+            <NumericPredictor name="f63" coefficient="19.91514991325876"/>
+            <NumericPredictor name="f64" coefficient="38.41912210806766"/>
+            <NumericPredictor name="f65" coefficient="-78.00189860399948"/>
+            <NumericPredictor name="f66" coefficient="12.234471459043736"/>
+            <NumericPredictor name="f67" coefficient="33.8665107409327"/>
+            <NumericPredictor name="f68" coefficient="25.078261763646932"/>
+            <NumericPredictor name="f69" coefficient="-9.393741280114593"/>
+            <NumericPredictor name="f70" coefficient="5.973140508493091"/>
+            <NumericPredictor name="f71" coefficient="3.007561393990249"/>
+            <NumericPredictor name="f72" coefficient="6.844286877725365"/>
+            <NumericPredictor name="f73" coefficient="5.3574017385065344"/>
+            <NumericPredictor name="f74" coefficient="-12.496784676316324"/>
+            <NumericPredictor name="f75" coefficient="-31.451867999082147"/>
+            <NumericPredictor name="f76" coefficient="15.34481603943323"/>
+            <NumericPredictor name="f77" coefficient="57.74708157513385"/>
+            <NumericPredictor name="f78" coefficient="10.904114839929974"/>
+            <NumericPredictor name="f79" coefficient="-22.464995014821135"/>
+            <NumericPredictor name="f80" coefficient="26.398363410864548"/>
+            <NumericPredictor name="f81" coefficient="32.7867807895383"/>
+            <NumericPredictor name="f82" coefficient="1.7670407543863251"/>
+            <NumericPredictor name="f83" coefficient="1.7265121727582091"/>
+            <NumericPredictor name="f84" coefficient="6.8220353347972384"/>
+            <NumericPredictor name="f85" coefficient="6.411005002346669"/>
+            <NumericPredictor name="f86" coefficient="-11.304036594721852"/>
+            <NumericPredictor name="f87" coefficient="18.89572568579677"/>
+            <NumericPredictor name="f88" coefficient="-7.235842798016146"/>
+            <NumericPredictor name="f89" coefficient="-12.029942676916225"/>
+            <NumericPredictor name="f90" coefficient="19.362578161867646"/>
+            <NumericPredictor name="f91" coefficient="6.849624537625675"/>
+            <NumericPredictor name="f92" coefficient="-22.24275622829718"/>
+            <NumericPredictor name="f93" coefficient="24.52732469590865"/>
+            <NumericPredictor name="f94" coefficient="-0.5170391825559952"/>
+        </RegressionTable>
+        <RegressionTable intercept="0.0" targetCategory="0"/>
+    </RegressionModel>
+</PMML>
