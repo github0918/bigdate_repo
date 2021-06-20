@@ -1,0 +1,156 @@
+
+
+
+
+
+栈是限定仅在 表尾  进行 添加和删除  操作的线性表   示例  Stack<E>
+
+
+	栈的顺序存储结构  用数据实现
+	
+
+	栈的链式存储结构   用链表实现
+
+
+
+队列 是 只允许在一端进行插入操作、而在另一端进行删除操作的线性表   示例   interface Queue<E>  ，  LinkedList 实现了它，看对应的重写方法
+
+
+
+	顺序存储结构
+
+
+	链式存储结构
+
+
+
+--------------------------------------------------------------------------
+
+
+
+Stack<E> extends Vector<E>
+
+
+	protected Object[] elementData;   数组  没有元素，初始化时容量是10
+
+	protected int elementCount;   数组中元素的个数，即栈顶元素的下标，并不是数组容量，
+
+	protected int capacityIncrement;
+	
+	
+	构造方法
+	public Vector(Collection<? extends E> c) {
+        elementData = c.toArray();
+        elementCount = elementData.length;
+        // c.toArray might (incorrectly) not return Object[] (see 6260652)
+        if (elementData.getClass() != Object[].class)
+            elementData = Arrays.copyOf(elementData, elementCount, Object[].class);
+    }
+	
+	
+	
+	
+	public E push(E var1) {
+	
+	检查容量 ，不够进行扩容 ， 如果 capacityIncrement 不是 >0， 就扩大为原来的两倍， 创建一个新数组 ， 把原来的数据copy过去
+	
+	
+	
+	
+	public synchronized E peek() {
+	
+        int var1 = this.size();  数组里放了有多少个元素
+        if (var1 == 0) {
+            throw new EmptyStackException();
+        } else {
+            return this.elementAt(var1 - 1);    数组 的最后一个元素 ， 即栈顶元素  
+        }
+    }
+	
+	
+	synchronized 修饰方法时锁定的是调用该方法的对象，用在当多个线程 公用一个 stack实例对象 的场景 ，如  stack 声明为 static 
+	https://www.cnblogs.com/hapjin/p/4678773.html
+	
+	
+	
+	
+	
+	 public synchronized E pop() {
+        int var2 = this.size();   数组里放了有多少个元素
+        Object var1 = this.peek();  数组 的最后一个元素 ， 即栈顶元素
+        this.removeElementAt(var2 - 1);
+        return var1;
+    }
+	
+	
+	
+	 this.removeElementAt
+	
+		 int j = elementCount - index - 1;      index 后面还有多少个元素， 栈的话 这里是 0   
+			if (j > 0) {
+				System.arraycopy(elementData, index + 1, elementData, index, j);   相当于把 index 后面的整体往前移一位， 正好把原来的 index 位置的数据干掉
+			}
+	
+	    elementCount--;
+		
+        elementData[elementCount] = null; 移除栈顶元素
+	
+	
+	
+	
+	
+-----------------------------------------------------------------------------------------------------
+
+
+LinkedList   
+
+
+	boolean offer(E e);   链表的尾部添加一个元素
+
+
+	    给 last 赋值
+
+
+
+	E poll();	   Retrieves and removes the head of this queue
+
+
+	  
+
+	 private E unlinkFirst(Node<E> f) {
+	 
+			// assert f == first && f != null;
+			final E element = f.item;     第一个元素
+			final Node<E> next = f.next;  
+			f.item = null;
+			f.next = null; // help GC
+			first = next;   把第二个元素赋值为第一个元素
+			if (next == null)
+				last = null;
+			else
+				next.prev = null;
+			size--;
+			modCount++;
+			return element;
+		}
+
+
+
+
+--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	

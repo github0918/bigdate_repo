@@ -1,0 +1,368 @@
+
+
+
+
+树    每个节点只有一个 父节点    没有父节点的是根节点  ， 没有子节点的 是 叶子节点  ， 同一个父节点下的是兄弟节点 
+
+
+
+
+
+简单的顺序存储不能满足树的实现
+
+结合顺序存储和链式存储来实现
+
+
+
+三种表示方法
+
+	（没啥用）双亲表示法   每个节点记录了它的父节点   找儿子节点比较复杂，需要遍历一遍
+
+	孩子表示法   每个节点记录了它的子节点  找父节点比较复杂   
+
+
+	（有用）	最终方案 散列链表 ， 类似hashmap的数据结构  把每个结点的孩子结点排列起来，以双向链表作为存储结构，则n个结点有n个孩子链表
+		
+		数组 存着所有的节点 node   每个node 用next 记录它的兄弟节点  ， 组成链表  ，用 prev 记录 前一个节点， 链表第一个节点就是父节点
+
+
+
+
+	（没啥用）孩子兄弟表示法
+
+
+------------------------------------------------------------------------------------
+
+二叉树   每个节点最多有两个子节点
+
+
+满二叉树   所有的节点（除了叶子节点）都有两个节点，并且叶子节点都在同一层上  
+
+
+完全二叉树   节点从上到下，每一层从左到右 连续 编号  ，  满二叉树，少了最后几个叶子节点 
+
+
+二叉树的五个性质 ， 见ppt文档  ，
+
+
+
+二叉树的存储  
+
+
+
+	二叉树的顺序存储结构  ， 用特殊符号，补全成 完全二叉树 ， 然后用数组 从上到下，每一层从左到右 存储  
+
+
+	二叉链表   每个node 存了 左右子节点
+
+
+
+二叉树的遍历 （重点）  代码见  BinaryTree.java     记忆 根据代码 反推 遍历顺序    node.leftChild 和 node.rightChild 是一对
+
+
+		前序遍历      先是根节点 如果子树存在 ，先遍历子树的左节点， ,  A B D E C F      B 这颗子树遍历完，然后遍历 B 的兄弟节点 C
+
+					   A
+
+				B			C
+
+			D		E			F
+					
+
+
+			对象
+				public class TreeNode{
+					private int index;
+					private String data;
+					private TreeNode leftChild;
+					private TreeNode rightChild;
+					
+					
+					
+			 public void preOrder(TreeNode node){
+				if(node == null){
+					return;
+				}else{
+					System.out.println("preOrder data:"+node.getData());
+					preOrder(node.leftChild);      根据递归的规律 ， 所有的leftChild 遍历完才会执行 preOrder(node.rightChild)
+					preOrder(node.rightChild);
+				}
+			}  
+
+
+
+		中序遍历      如果有子树存在，先遍历子树的 左 根  右      DBEACF     中序遍历用于遍历查找二叉树 
+
+
+
+
+		public void midOrder(TreeNode node){
+				if(node == null){
+					return;
+				}else{
+					midOrder(node.leftChild);
+					System.out.println("midOrder data:"+node.getData());
+					midOrder(node.rightChild);
+				}
+			}
+
+
+
+		后续遍历 	左   右   根			DEBFCA
+
+
+		public void postOrder(TreeNode node){
+				if(node == null){
+					return;
+				}else{
+					postOrder(node.leftChild);
+					postOrder(node.rightChild);
+					System.out.println("postOrder data:"+node.getData());
+				}
+			}
+
+
+
+
+     用 stack 栈的方式实现前序遍历    从根节点开始 ， A 压进栈 ， 遍历打印A ， 把A弹出栈 ， A 的右节点C压栈，A 的左节点B压栈、遍历打印B，把B弹出栈，················
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+二叉树建立    
+
+普通二叉树  用#号补全   每个节点都有两个子节点，叶子节点也补上两个#
+
+
+
+					   A
+
+				B			  C
+
+			D		E	   #	   F
+			
+		# 	  #	 #    #         #     #
+		
+		
+		
+	前序序列 	ABD##E##C#F##
+	
+	
+	
+	    private  TreeNode createBinaryTree(int size , ArrayList<String> data){
+            if(data.size() == 0){   
+                return null;
+            }
+            TreeNode node = null;
+            String d = data.get(0);
+            if("#".equals(d)){
+                data.remove(0);    每遍历一个移除一个
+                return node;
+            }
+            int index = size - data.size()  ;
+            //创建节点
+            node = new TreeNode(index,d);
+            //给根节点赋值 , root ,用来遍历
+            if(index == 0){
+                root = node;
+            }
+            data.remove(0);
+            node.leftChild = createBinaryTree(size ,  data);
+            node.rightChild = createBinaryTree( size ,  data);
+            return node;
+    }
+	
+	
+	
+	
+-----------------------------------------------------------------------------------------------------
+
+构建查找二叉树  ， 然后用中序遍历 ，从小到大遍历
+
+
+
+	查找二叉树    小的放在节点左边 ， 否则放右边  
+	
+	
+	
+	
+	
+	 /**
+     *  构建查找二叉树   添加元素
+     * @author Administrator
+     *
+     */
+
+    public  void searchTree_put(int data ){
+        TreeNode node ;
+        TreeNode parentNode;
+        //创建根节点
+        if(root == null){
+            root = new TreeNode(0,String.valueOf(data));
+            return ;
+        }
+        node = root;
+        parentNode = node;
+        while (node != null){  //找到应该挂在哪个parentNode节点下面
+            parentNode = node;
+            if(data > Integer.parseInt(node.getData())){
+                node = node.rightChild;   //下次跟它的右节点比较
+            }else if(data < Integer.parseInt(node.getData())){
+                node = node.leftChild;
+            }else{
+                return;
+            }
+        }
+        node = new TreeNode(0,String.valueOf(data));
+        //
+        if(data > Integer.parseInt(parentNode.getData())){
+             parentNode.rightChild = node ;
+        }else if(data < Integer.parseInt(parentNode.getData())){
+             parentNode.leftChild = node;
+        }
+    }
+	
+	public static void main(String[] args){
+
+        BinaryTree binaryTree = new BinaryTree();
+        binaryTree.searchTree_put(8);
+        binaryTree.searchTree_put(20);
+        binaryTree.searchTree_put(13);
+        binaryTree.searchTree_put(66);
+        binaryTree.searchTree_put(21);
+        binaryTree.searchTree_put(35);
+        binaryTree.searchTree_put(8);
+        binaryTree.searchTree_put(9);
+        binaryTree.midOrder(binaryTree.root);
+    }
+	
+	
+	
+---------------------------------------------------------------
+	
+
+	
+	    /**
+     *  查询二叉树  根据值查询节点
+     * @author Administrator
+     *
+     */
+    public  TreeNode searchNode(String data){
+        int num = Integer.parseInt(data);
+        TreeNode node = root;
+        while(node != null){
+            if( num > Integer.parseInt(node.data)){
+                node = node.rightChild;
+            }else if( num < Integer.parseInt(node.data)){
+                node = node.leftChild;
+            }else{
+                return node;
+            }
+        }
+        return null;
+    }
+	
+	
+	
+	
+	
+	/**
+     *  查找二叉树   删除元素
+     * @author Administrator
+     *
+     */
+	
+	
+	1、查找到要删除的节点node
+	
+	
+	2、node没有 孩子节点 ， 直接删除
+	
+	3、 只有 左， 或者 右 孩子节点， 删除node， 把孩子放在node的位置
+	
+	
+	4、 node 同时有 左孩子 和 右孩子  ， 查找后续节点  ， 删除后续节点， 把后续节点替换原来的node
+	
+	
+	后续节点   比如 原来的节点序列 排序    12  15  16  23  31  56   要把16移除、后续节点就是它后面的 23  
+	
+	
+		情况一   右孩子 不为空 ， 后续节点为右孩子所在树的最左边的节点， 右树最小值
+		
+		情况二   右孩子 为空 ， 层层往上找，找到第一个 右parent   ， 如 46 的后续节点是 50 
+		
+					   50
+		
+				40  
+		
+		  32  		46
+	
+	
+	
+	
+	
+	    /**
+     *  获取查询二叉树的 后续节点
+     * @author Administrator
+     *
+     */
+
+    public  TreeNode getNextNode(TreeNode node){
+        if(node == null ){
+            return null;
+        }
+        TreeNode treeNode = null;
+        //右孩子 不为空 ， 后续节点为右孩子所在树的最左边的节点， 右树最小值
+        if(node.rightChild != null){
+            treeNode = node.rightChild;
+            while(treeNode.leftChild!= null){
+                treeNode = treeNode.leftChild;
+            }
+        }else{
+            TreeNode parentNode = node.parentNode;
+            //如果  parentNode == null ，表示没有后续节点，是序列的最大值
+            while(parentNode != null && parentNode.leftChild != node){
+                node =  parentNode;
+                parentNode = node.parentNode;
+            }
+            treeNode = parentNode;
+        }
+       return treeNode;
+    }
+
+
+
+    public static void main(String[] args){
+
+
+        BinaryTree binaryTree = new BinaryTree();
+        binaryTree.searchTree_put(50);
+        binaryTree.searchTree_put(44);
+        binaryTree.searchTree_put(32);
+        binaryTree.searchTree_put(46);
+        binaryTree.searchTree_put(60);
+        binaryTree.searchTree_put(55);
+        binaryTree.searchTree_put(65);
+        binaryTree.searchTree_put(52);
+        binaryTree.searchTree_put(57);
+        binaryTree.searchTree_put(51);
+        binaryTree.searchTree_put(56);
+        binaryTree.searchTree_put(58);
+        binaryTree.midOrder(binaryTree.root);
+
+        TreeNode treeNode55 = binaryTree.searchNode("55");
+        System.out.println(treeNode55.getData());
+        System.out.println("55 next node : " + binaryTree.getNextNode(treeNode55).getData());
+
+
+        TreeNode treeNode46 = binaryTree.searchNode("46");
+        System.out.println(treeNode46.getData());
+        System.out.println("46 next node : " + binaryTree.getNextNode(treeNode46).getData());
+    }
+
+ 
+
+

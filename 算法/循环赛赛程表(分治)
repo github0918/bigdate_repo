@@ -1,0 +1,78 @@
+
+
+求 n 支球队 n-1天比赛完  的循环赛 赛程表 ， n 为 2 的 x 次方  ， 1  4  8  16  
+
+
+
+
+
+
+ 矩阵 横表示球队第几天的对手 ， 列表示球队  
+
+
+1   2   3   4   5   6   7   8   
+
+2   1   4   3   6   5   8   7   
+
+3   4   1   2   7   8   5   6   
+
+4   3   2   1   8   7   6   5   
+
+5   6   7   8   1   2   3   4   
+
+6   5   8   7   2   1   4   3   
+
+7   8   5   6   3   4   1   2   
+
+8   7   6   5   4   3   2   1 
+
+
+
+思路：递归 分治 ， n 转化成  求四个 1/4 的过程  
+
+
+
+   public void scheduleTable(int[][] schedule,int n){
+       if(n == 1){
+           schedule[0][0] = n;
+           return;
+       }
+       //填充左上角区域
+       int k = n/2;
+       scheduleTable( schedule, k);         //递归把矩阵 划分
+       //填充右上角区域
+       for (int i = 0; i < k; i++) {
+           for (int j = 0; j < k; j++) {
+               schedule[i][j+k] = schedule[i][j] + k;
+           }
+       }
+       //填充左下角区域
+       for (int i = 0; i < k; i++) {
+           for (int j = 0; j < k; j++) {
+               schedule[i+k][j] = schedule[i][j] + k;
+           }
+       }
+       //填充右下角区域
+       for (int i = 0; i < k; i++) {
+           for (int j = 0; j < k; j++) {
+               schedule[i+k][j+k] = schedule[i][j];
+           }
+       }
+   }
+
+    public static void main(String[] args) {
+        RoundRobin roundRobin = new RoundRobin();
+        int[][] ints = new int[8][8];
+        roundRobin.scheduleTable(ints,8);
+        //打印数组
+        for (int i = 0; i < ints.length; i++) {
+            for (int j = 0; j < ints[0].length; j++) {
+                System.out.print(ints[i][j] + "   ");
+            }
+            System.out.println();
+        }
+    }
+
+
+
+

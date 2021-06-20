@@ -1,0 +1,128 @@
+
+
+
+
+
+
+线性表   
+
+
+
+
+顺序 存储方式线性表    例子   数组    ArrayList
+
+	每个元素有序号  方便计算每个元素的位置，按顺序排好，查找快
+
+	缺点，中间增加或者删除一个元素，后续所有的元素都要向前或者向后移动一位， 增删慢
+
+
+
+链表 存储方式线性表   例子  LinkedList
+
+    每个元素只是记住自己后面的元素， 增删快，只要修改这个元素前面的那个元素
+	
+	查询慢，由于没有序号，需要从头开始 一个一个往下找
+	
+	
+	
+
+循环链表  头尾相连的单链表称为单循环链表，
+
+
+
+双向循环链表   每个元素记住自己前后的元素 、并且首尾也是一样相连
+
+
+
+
+代码实现看下  ArrayList  和   LinkedList 的 增删改查方法
+
+
+
+ArrayList  
+
+	内部维护了一个 数组  Object[] elementData
+
+
+	add 和 remove 方法 处理 中间某个元素  都调用 System.arraycopy 方法对数组进行重新复制 ，比价耗性能  ，慢
+	
+	add 如果 此时 elementData的size已经满了，要新建一个更大的 Object[] ，用 System.arraycopy 把原来 elementData的数据复制过去  
+
+
+	ArrayList底层jdk源码之modCount、expectedModCount解读   https://blog.csdn.net/xiaoleilei666/article/details/102881314
+
+		modCount 用来标记list 结构的变化次数  
+
+		通过 modCount、Iterator.expectedModCount 的比较 ，保证在使用 Iterator 时 ， list 没有被修改
+	
+	
+	
+	
+LinkedList
+
+	结构   创建一个LinkedList ，它自己录了第一个和最后一个 Node    然后在 内存中new 了 多个 Node<E>  ，各自记录了前后的 node 得地址， 就这样构成一个链表  
+	
+	
+	
+		transient int size;   当前链表的长度 ， 用于判断是在中间添加数据 还是 在最后添加数据 
+		transient LinkedList.Node<E> first;  链表的第一个元素
+		transient LinkedList.Node<E> last;
+		
+		
+		
+		 private static class Node<E> {
+			E item;
+			Node<E> next; 记录它的后一个元素
+			Node<E> prev; 记录它的前一个元素
+
+			Node(Node<E> prev, E element, Node<E> next) {
+				this.item = element;
+				this.next = next;
+				this.prev = prev;
+			}
+		}
+	
+	
+	
+	在某个位置var1插入 一个集合  
+	
+		public boolean addAll(int var1, Collection<? extends E> var2) {
+		
+		实现 
+		
+		1、 从first 开始 循环求 var1 次 next 得到 var1所在位置的 node
+		
+			LinkedList.Node<E> node(int var1) {
+				LinkedList.Node var2;
+				int var3;
+				if (var1 < this.size >> 1) {
+					var2 = this.first;
+
+					for(var3 = 0; var3 < var1; ++var3) {
+						var2 = var2.next;
+					}
+
+					return var2;
+				} else {
+		
+		
+		2、 取得node前面的元素 ，给node.next赋值   遍历 var2，把元素一个一个next 上去  
+		 
+			for(int var9 = 0; var9 < var8; ++var9) {
+						Object var10 = var7[var9];
+						LinkedList.Node var12 = new LinkedList.Node(var5, var10, (LinkedList.Node)null);
+						if (var5 == null) {
+							this.first = var12;
+						} else {
+							var5.next = var12;
+						}
+
+						var5 = var12;
+					}
+	
+	
+
+
+
+
+

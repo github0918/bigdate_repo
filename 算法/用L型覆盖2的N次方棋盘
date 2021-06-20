@@ -1,0 +1,177 @@
+
+
+用L型覆盖2的N次方棋盘， 规则 是 先在棋盘上选一个任一点，作为特殊点，然后开始放 L 型 ， 直到棋盘全部放满；
+
+
+
+
+规律 每次棋盘一分为四，每一份中肯定有一个特殊点  
+
+
+
+/**
+	 * 
+	 * @param specialRow   特殊点的行下标
+	 * @param specialCol   特殊点的列下标
+	 * @param leftRow      矩阵左边起点行下标
+	 * @param leftCol      矩阵左边起点的列下标
+	 * @param size         矩阵的宽或者高
+	 */
+	private void ChessBoard(int specialRow,int specialCol,int leftRow,int leftCol,int size){
+		if(size == 1){
+			return;
+		}
+		int subSize = size/2;
+		type = type%4 + 1;
+		int n = type;
+		//假设特殊点在左上角区域
+		if(specialRow<leftRow+subSize&&specialCol<leftCol+subSize){
+			ChessBoard(specialRow, specialCol, leftRow, leftCol, subSize);
+		}else{
+			//不在左上角，左上角矩阵的右下角就是特殊点
+			board[leftRow+subSize-1][leftCol+subSize-1] = n;
+			ChessBoard(leftRow+subSize-1, leftCol+subSize-1, leftRow, leftCol, subSize);
+		}
+		//特殊点在右上方
+		if(specialRow<leftRow+subSize&&specialCol>=leftCol+subSize){
+			ChessBoard(specialRow, specialCol, leftRow, leftCol+subSize, subSize);
+		}else{
+			board[leftRow+subSize-1][leftCol+subSize] = n;
+			ChessBoard(leftRow+subSize-1, leftCol+subSize, leftRow, leftCol+subSize, subSize);
+		}
+		//特殊点在左下方
+		if(specialRow>=leftRow+subSize&&specialCol<leftCol+subSize){
+			ChessBoard(specialRow, specialCol, leftRow+subSize, leftCol, subSize);
+		}else{
+			board[leftRow+subSize][leftCol+subSize-1] = n;
+			ChessBoard(leftRow+subSize, leftCol+subSize-1, leftRow+subSize, leftCol, subSize);
+		}
+		
+		//特殊点在右下角
+		if(specialRow>=leftRow+subSize&&specialCol>=leftCol+subSize){
+			ChessBoard(specialRow, specialCol, leftRow+subSize, leftCol+subSize, subSize);
+		}else{
+			board[leftRow+subSize][leftCol+subSize] = n;
+			ChessBoard(leftRow+subSize, leftCol+subSize, leftRow+subSize, leftCol+subSize, subSize);
+		}
+	}
+
+
+-----------------错误解法 ， 自己写的-----------------
+
+
+总结 ， 一个方法内，调了几次本身方法的 ， 防止对方法变量的 多次修改
+
+
+
+
+
+            chessBoard[size-1][size]= l;
+            chessBoard[size][size]= l;
+            chessBoard[size][size-1]= l;
+            l++;
+            chessBoard(size-1,size,chessBoard,size);    //三次chessBoard方法 重复执行了 给 chessBoard[i][j] 赋值的代码，造成重复赋值
+            chessBoard(size,size,chessBoard,size);
+            chessBoard(size,size-1,chessBoard,size);
+
+
+
+
+
+
+
+
+    private int i0 ; //特殊点纵坐标
+    private int j0 ; //
+    private int l = 1;  //代表L型的数字
+
+    public ChessBoard(int i0,int j0) {
+        this.i0 = i0;
+        this.j0 = j0;
+    }
+
+
+
+    /*
+        *     int[][] chessBoard;
+            int  n ;  //size
+            int i0 ; //特殊点纵坐标
+             int j0 ; //
+        * */
+        public void chessBoard(int i,int j,int[][] chessBoard,int n){
+        if(n<2){
+            return;
+        }
+        int size = n/2 ;
+
+        //特殊点在 左上角
+        if(i<size  && j<size){
+            chessBoard(i,j,chessBoard,size); //特殊点坐标不变
+            //填充角点，并作为其他三个模块的特殊点
+            chessBoard[i][j+1]= l;
+            chessBoard[i+1][j]= l;
+            chessBoard[i+1][j+1]= l;
+            l++;
+            chessBoard(i,j+1,chessBoard,size);
+            chessBoard(i+1,j,chessBoard,size);
+            chessBoard(i+1,j+1,chessBoard,size);
+        }
+        //特殊点在 右上角
+        if(i<size  && j>=size){
+            chessBoard(i,j,chessBoard,size);
+            chessBoard[i][j-1]= l;
+            chessBoard[i+1][j-1]= l;
+            chessBoard[i+1][j]= l;
+            l++;
+            chessBoard(i,j-1,chessBoard,size);
+            chessBoard(i+1,j-1,chessBoard,size);
+            chessBoard(i+1,j,chessBoard,size);
+        }
+        //特殊点在 左下角
+        if(i>=size  && j<size){
+            chessBoard(i,j,chessBoard,size);
+            chessBoard[i-1][j]= l;
+            chessBoard[i-1][j+1]= l;
+            chessBoard[i][j+1]= l;
+            l++;
+            chessBoard(i-1,j,chessBoard,size);
+            chessBoard(i-1,j+1,chessBoard,size);
+            chessBoard(i,j+1,chessBoard,size);
+        }
+        //特殊点在 右下角
+        if(i>=size  && j>=size){
+            chessBoard(i,j,chessBoard,size);
+            chessBoard[i-1][j-1]= l;
+            chessBoard[i-1][j]= l;
+            chessBoard[i][j-1]= l;
+            l++;
+            chessBoard(i-1,j-1,chessBoard,size);
+            chessBoard(i-1,j,chessBoard,size);
+            chessBoard(i,j-1,chessBoard,size);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] chessBoards = new int[4][4];
+        ChessBoard chessBoard = new ChessBoard(0, 0);
+        chessBoard.chessBoard(0,0,chessBoards,4);
+
+        //打印数组
+        for (int i = 0; i < chessBoards.length; i++) {
+            for (int j = 0; j < chessBoards[0].length; j++) {
+                System.out.print(chessBoards[i][j] + "   ");
+            }
+            System.out.println();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+

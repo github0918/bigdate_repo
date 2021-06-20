@@ -1,0 +1,43 @@
+
+
+求两个字符串的最大公共子序列的长度(动态规划)
+
+
+android  的 其中一个子序列   ado  不要求连续
+
+
+
+i j 分别是两个字符串的长度
+
+ C[i,j] = 0                			 i=0 && j=0
+ 
+		= C[i-1,j-1] +1    			 Str[i] = Str[j]
+		
+		= Max{C[i-1,j] , C[i,j-1]}   Str[i] != Str[j]
+
+
+
+
+
+    public int sbusequenct(String str1,String str2){
+        if(str1.length() == 0 || str2.length() == 0){
+            return 0;
+        }
+        String stri = str1.substring(str1.length() - 1, str1.length());
+        String strj = str2.substring(str2.length() - 1, str2.length());
+        if(stri.equals(strj)){
+            return sbusequenct(str1.substring(0,str1.length() - 1),str2.substring(0,str2.length() - 1)) + 1;
+        }else{
+            int sbusequenct = sbusequenct(str1.substring(0, str1.length() - 1), str2.substring(0, str2.length()));
+            int sbusequenct1 = sbusequenct(str1.substring(0, str1.length()), str2.substring(0, str2.length() - 1));
+            return Math.max(sbusequenct,sbusequenct1);
+        }
+    }
+
+    public static void main(String[] args) {
+        Subsequence subsequence = new Subsequence();
+        System.out.println(subsequence.sbusequenct("abcfafsfsf","acfffd"));
+    }
+
+
+

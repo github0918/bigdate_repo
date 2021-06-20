@@ -1,0 +1,169 @@
+
+
+hashMap算法实现
+
+https://blog.csdn.net/weixin_43539126/article/details/83475011
+
+
+
+当创建一个hashmap进行添加数据时会根据key值底层调用key.hashCode()方法进行计算下标，
+
+得到下标后将key,value值封装成一个Entry对象保存在数组里面，位置根据计算的下标进行存放。
+
+如果计算的下标相同时会进行和其他对象依次比较，用的方法是Equals()比较如果相等就覆盖原来的数据，不相等时会以链表的形式保存起来。
+
+在1.8版本以后链表长度达到8时结构会改成红黑树存放，红黑树数据减少到6，重新恢复成链表。当map数组的负载率达到0.75时数组的容量翻倍。
+
+
+object 默认使用 内存地址和属性数据计算hashcode值 
+
+
+
+
+
+1 << 4   1,左移4位,变成10000,也就是16
+
+
+
+ 元素
+
+    static class Node<K,V> implements Map.Entry<K,V> {
+        final int hash;
+        final K key;
+        V value;
+        Node<K,V> next;    Node 之间单线链表
+		
+		
+		public final int hashCode() {
+            return Objects.hashCode(key) ^ Objects.hashCode(value);
+        }
+		
+		
+		public final boolean equals(Object o) {
+            if (o == this)
+                return true;
+            if (o instanceof Map.Entry) {
+                Map.Entry<?,?> e = (Map.Entry<?,?>)o;
+                if (Objects.equals(key, e.getKey()) &&
+                    Objects.equals(value, e.getValue()))
+                    return true;
+            }
+            return false;
+        }
+		
+		
+		public boolean equals(Object obj) {    只是比较了地址值
+        return (this == obj);  
+        }
+		
+		
+	浅谈Object的hashCode方法的作用    https://blog.csdn.net/tectrol/article/details/80646966
+		
+		
+	Java中的hashCode方法就是根据一定的规则将与对象相关的信息（比如对象的存储地址，对象的字段等）映射成一个数值，这个数值称作为散列值。
+
+    其主要作用是为了配合基于散列的集合一起正常运行，这样的散列集合包括HashSet、HashMap以及HashTable。
+
+    当集合要添加新的对象时，先调用这个对象的hashCode方法，得到对应的hashcode值，实际上在HashMap的具体实现中会用一个table保存已经存进去的对象的hashcode值，如果table中没有该hashcode值，它就可以直接存进去，不用再进行任何比较了；如果存在该hashcode值，就调用它的equals方法与新元素进行比较，相同的话就不存了，不相同就散列其它的地址。
+
+    这样解决了向含有大量数据的集合中添加元素时，大量频繁的操作equals方法的问题。
+
+
+
+
+
+    transient Node<K,V>[] table;      数组 ， 数组里面装的node ， node用链表连接多个
+
+
+
+
+添加数据
+
+
+
+	 public V put(K key, V value) {
+			return putVal(hash(key), key, value, false, true);
+		}
+		
+		
+
+	final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+					   boolean evict) {
+			Node<K,V>[] tab; Node<K,V> p; int n, i;
+			if ((tab = table) == null || (n = tab.length) == 0)    如果table为 空  初始化一个
+				n = (tab = resize()).length;
+			if ((p = tab[i = (n - 1) & hash]) == null)       table 的大小 和  hash 值 取模 确定在数组的哪个下标放入数据 ， 如果该下标 上没有数据  直接放入数据 
+				tab[i] = newNode(hash, key, value, null);       
+			else {
+				Node<K,V> e; K k;
+				if (p.hash == hash &&
+					((k = p.key) == key || (key != null && key.equals(k))))             hash 相同 并且 key 相同  ，value覆盖
+					e = p;
+				else if (p instanceof TreeNode)
+					e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+				else {
+					for (int binCount = 0; ; ++binCount) {           循环找到 node链表的末尾，添加数据       
+						if ((e = p.next) == null) {
+							p.next = newNode(hash, key, value, null);
+							if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st          node链表  长度超过8 时，用tree 进行存储 
+								treeifyBin(tab, hash);
+							break;
+						}
+						if (e.hash == hash &&
+							((k = e.key) == key || (key != null && key.equals(k))))		 hash 相同 并且 key 相同  ，value覆盖
+							break;
+						p = e;
+					}
+				}
+				if (e != null) { // existing mapping for key               hash 相同 并且 key 相同  ，value覆盖
+					V oldValue = e.value;
+					if (!onlyIfAbsent || oldValue == null)
+						e.value = value;
+					afterNodeAccess(e);
+					return oldValue;
+				}
+			}
+			++modCount;
+			if (++size > threshold)
+				resize();
+			afterNodeInsertion(evict);
+			return null;
+		}
+
+
+
+获取  
+
+final Node<K,V> getNode(int hash, Object key) {
+        Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
+        if ((tab = table) != null && (n = tab.length) > 0 &&
+            (first = tab[(n - 1) & hash]) != null) {				跟存储时一样的算法  (n - 1) & hash 获取 node所在的链表所在的 数组下标
+            if (first.hash == hash && // always check first node
+                ((k = first.key) == key || (key != null && key.equals(k))))
+                return first;
+            if ((e = first.next) != null) {
+                if (first instanceof TreeNode)
+                    return ((TreeNode<K,V>)first).getTreeNode(hash, key);
+                do {
+                    if (e.hash == hash &&
+                        ((k = e.key) == key || (key != null && key.equals(k))))
+                        return e;
+                } while ((e = e.next) != null);         链表 中 一个一个往下找
+            }
+        }
+        return null;
+    }
+
+	
+--------------------------------------------------------------------------------------------------	
+	
+	
+HashMap和LinkedHashMap的区别  https://blog.csdn.net/qq_42359423/article/details/80599880
+
+LinkedHashMap也是一个HashMap,但是内部维持了一个双向链表,可以保持顺序			
+		
+		
+		
+		
+		
+		

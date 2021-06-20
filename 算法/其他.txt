@@ -1,0 +1,287 @@
+
+
+
+
+
+输入两个整数 n 和 m，从数列1，2，3.......n 中随意取几个数, 使其和等于 m
+
+https://blog.csdn.net/baidu_37107022/article/details/75125846
+
+
+
+思路和背包问题差不多，m就相当于背包能容纳的重量了
+
+
+数列1，2，3.......n  从右往左，对于每一个数字有两种情况，装到背包里 和 不装
+
+	如果 m-n <= 0 ，可以装，也可以不装；
+	
+	如果 m-n > 0 不装，装不下了
+	
+
+		装进去
+
+			重新给m、n 赋值  m = m-n   n = n-1   ，有两种情况
+
+				m > 0  , 继续考虑下一个数字  n
+
+				m = 0  , 满足要求，输出结果
+
+		不装
+
+			重新给m、n 赋值  m = m   n = n-1  继续考虑下一个数字  n
+
+			
+		如果出现 n < 1 ,终止
+
+
+
+
+
+    public static void main(String[] args) {
+        int m = 5;
+        int n = 5;
+        Algorithm1 algorithm1 = new Algorithm1();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        algorithm1.printResult(arrayList,n,m);
+    }
+
+    public void printResult(List list,int n , int m){
+        // new 复制一份之前list的数据，不可改变之前的list，因为它在其他的情况中还会用到
+        ArrayList<Integer> arrayList = new ArrayList<>(list);
+        arrayList.add(n);
+        //递归终止条件 ，到了第一个数字
+        if(n < 1){
+            return ;
+        }
+        //不装
+        if(m-n<0){
+            printResult( list, n-1 , m);
+            return ;
+        }
+        if(m-n==0){
+            System.out.println(arrayList.toString());
+        }
+        // 可以装也可以不装
+        if(m-n>=0){
+            printResult( list, n-1 , m);
+            printResult( arrayList, n-1 , m-n);
+        }
+    }
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+有一个X*Y的网格，要在此网格上从左上角到右下角，只能走格点且只能向右或向下走。
+
+请设计一个算法，计算有多少种走法。
+
+
+示例
+
+	2*3 矩阵 从1走到6   
+
+
+		1 2 3 
+		4 5 6
+
+	走法  1 2 3 6 、 1 2 5 6 、 1 4 5 6 
+	
+
+	对于每一步 有两种情况  向右、向下
+
+	向下  x=x-1  
+
+	向右  y=y-1
+
+	出现 x = 0 或者 y = 0  表示走出矩阵了，结束
+
+	出现 x = 1 && y = 1  表示走到原点了，打印走过的轨迹， 结束
+
+
+
+
+ public static void main(String[] args) {
+       
+        int x = 2;
+        int y = 3;
+        Algorithm1 algorithm1 = new Algorithm1();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        algorithm1.printStep( arrayList ,  x,  y, y);
+    }
+
+
+
+	/*
+		* list
+		* x 第几行
+		* y 第几列
+		* y0 原来一共有多少列
+		*
+		* */
+		public void printStep(List list , int x , int y,int y0){
+			//
+			ArrayList<Integer> arrayList = new ArrayList<Integer>(list);
+			arrayList.add((x-1)*y0+y);
+			//到达终点,打印结果
+			if(x==1 && y ==1){
+				Collections.reverse(arrayList);
+				System.out.println(arrayList.toString());
+				return;
+			}
+			//走出矩阵
+			if(x==0 || y ==0){
+				return;
+			}
+			//向下或者向右走
+			printStep( arrayList ,  x -1,  y, y0);
+			printStep( arrayList ,  x ,  y-1, y0);
+		}
+
+
+-----------------------------------------------------------------------------------------
+
+
+求一个矩阵的最长递增路径的长度，对于每一个单元格，可以向上下左右移动，
+
+不能对角线移动或者移动到矩阵外
+
+递增路径  ： 前后的两个数是递增关系
+
+	示例
+
+	nums = [
+	  [9,9,4],
+	  [6,6,8],
+	  [2,1,1]
+	]
+ 
+ 输出4， 最长递增路径 1、2、6、9
+
+
+
+
+思路：
+
+1、对于每一个节点，都可以向上下左右 递增伸展
+
+2、定义一个等大的 二位数组 int[][] dp ，用来记录原来矩阵 每一个节点，在增长路径中的排名
+
+示例  节点9 ， 在 递增路径 1、2、6、9 中排第一，记录 为 1 ,  其实可以确定  节点9 在任何一条递增路径中都是 1
+
+	  节点6 ， 在 递增路径 1、2、6、9 中排第2，记录 为 2 
+
+关键 : 这个排名 是固定不变的  ， 无论以任何一个节点作为起点开始递增伸展，找增长路径 
+
+
+输出结果  
+dp =
+[1, 1, 2]
+[2, 2, 1]
+[3, 4, 2]
+
+4
+
+
+
+
+    public static void main(String[] args) {
+
+        int[][] testInt = new int[3][3];
+        int[] test0 = {9,9,4};
+        testInt[0] = test0;
+        int[] test1 = {6,6,8};
+        testInt[1] = test1;
+        int[] test2 = {2,1,1};
+        testInt[2] = test2;
+
+        Algorithm1 algorithm1 = new Algorithm1();
+        System.out.println(algorithm1.maxIncreasingPath(testInt));
+
+    }
+
+
+
+  /*
+   *求最长递增路径的长度
+   *
+   * */
+
+   public int maxIncreasingPath(int[][] matrix){
+       if(matrix.length == 0){
+           return 0;
+       }
+       //定义一个等大的 二位数组 int[][] dp ，用来记录原来矩阵 每一个节点，在最长增长路径中的排名
+       int[][] dp = new int[matrix.length][matrix[0].length];
+       
+       //最长路径长度
+       int maxLent = 0;
+
+       //任何一个节点都可以作为开始节点
+       for (int i = 0; i < matrix.length; i++) {
+           for (int j = 0; j < matrix[0].length; j++) {
+               maxLent = Math.max(maxLent,dfs(matrix,i,j,dp,Integer.MIN_VALUE));
+           }
+       }
+       //打印结果
+       for (int i = 0; i < dp.length; i++) {
+           int[] ints = dp[i];
+           System.out.println(Arrays.toString(ints));
+       }
+       return maxLent;
+
+   }
+   
+   private int dfs(int[][]matrix,int i,int j ,int[][]dp, int temp ){
+       //走出矩阵，返回
+       if(i<0||j<0||i>matrix.length-1||j>matrix[0].length-1){
+           return 0;
+       }
+      //不是递增
+       if(matrix[i][j]<= temp){
+           return 0;
+       }
+       //上下左右
+       int dfsUp = dfs(matrix, i-1, j, dp, matrix[i][j]);
+       int dfsDown = dfs(matrix, i+1, j, dp, matrix[i][j]);
+       int dfsLeft = dfs(matrix, i, j-1, dp, matrix[i][j]);
+       int dfsRight = dfs(matrix, i, j+1, dp, matrix[i][j]);
+
+       //给当前节点赋值
+       dp[i][j] = 1+Math.max(Math.max(dfsUp,dfsDown),Math.max(dfsLeft,dfsRight));
+       return dp[i][j];
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,374 @@
+
+
+指令重排 :  jvm内部的优化，并不一定会发生 ， 重排前后， 不会影响当前线程的执行结果
+
+
+thread.interrupt()  线程被标记中断，并不是中断线程 ， 只是 thread.isinterrupt（） 方法返回true
+
+thread.sleep() 时被中断，抛异常会清除标志位
+
+
+
+Java的Unsafe类及compareAndSwap浅析
+https://blog.csdn.net/zmx729618/article/details/78528227
+
+
+
+-----------------------------------------------------
+
+https://blog.csdn.net/heroqiang/article/details/79393466
+AQS（AbstractQueuedSynchronizer）源码解析（独占锁部分）
+
+https://blog.csdn.net/heroqiang/article/details/79644288
+AQS（AbstractQueuedSynchronizer）源码解析（共享锁部分）
+
+
+https://blog.csdn.net/chen77716/article/details/6641477
+
+https://blog.csdn.net/a6822342/article/details/84875304
+
+
+
+
+SIGNAL(-1) ：线程的后继线程正/已被阻塞，当该线程release或cancel时要重新这个后继线程(unpark)
+
+CANCELLED(1)：因为超时或中断，该线程已经被取消
+
+CONDITION(-2)：表明该线程被处于条件队列，就是因为调用了Condition.await而被阻塞
+
+PROPAGATE(-3)：传播共享锁
+
+0：0代表无状态
+
+
+
+
+
+很多的同步器如ReentrantLock（重入锁）、ReadWriteLock（读写锁）、CountDownLatch（闭锁）、Semaphore（信号量）
+还有线程池等都是基于AQS（AbstractQueuedSynchronizer）构建的
+
+
+
+tryAcquire（） 获取锁的操作，子类实现
+
+
+优化手段
+shouldParkAfterFailedAcquire(Node pred, Node node)   用于判断 是重试获取，还是暂时阻塞，， 前任节点SIGNAL，当前节点就可以阻塞了
+
+节点的等待状态是SIGNAL，用来标记后继节点需要被唤醒
+
+如果前任节点是作废的 waitStatus = cancel ，先前找最近一个不是作废的节点作为前任节点
+，如果前任节点 是 阻塞的 waitStatus = SIGNAL，那当前节点可以暂时阻塞吧，
+否则 这是 前任肯定是 0或PROPAGATE ， 就尝试把它设置成  SIGNAL
+
+
+
+
+
+release(int arg)    获得锁 成功后 tryRelease(arg)  ， 唤醒后面最近一个不是  waitStatus = cancel，的线程去竞争锁 LockSupport.unpark(s.thread); ，
+
+
+
+
+https://blog.csdn.net/anLA_/article/details/78635300
+Java并发学习(五)-LockSupport里面的park和unpark
+
+-------------------------------------------------------
+
+ReentrantLock 源码
+
+重入锁  
+
+
+定义了一个 Sync 对象 ， 继承了 一个同步队列 AbstractQueuedSynchronizer
+
+	AbstractQueuedSynchronizer 中的 status 为0  ，  表示 锁可以被获取 ，当前占有锁 的线程为 null  ， 获取锁的过程  compareAndSetState
+
+
+ nonfairTryAcquire 方法  一次不公平的尝试 加锁 ，如果占有所的线程是本身，就在 status 累加， 即重复加锁，重入锁名称的由来， 释放锁的方法tryRelease，里会累计减除，直到status 为零时，锁全部释放
+ 
+ 
+ 
+
+Sync 有两个实现  ， 公平 FairSync     和   不公平  NonfairSync
+
+
+获取锁失败，会创建一个node 追加到一个 同步队列的尾部  ，compareAndSetTail(pred, node)  ， 
+
+
+同时线程调用一个无限循环 获取锁，当然这个方法可以被显示中断 
+
+
+公平的体现是  获取锁前，判断 代表当前线程的node 的前一个是不是 head  
+
+
+
+---------------------------------------------------------------------------------
+
+
+为什么引入 Lock ， lock是java实现的，ReentrantLock 是其中一个实现
+
+
+Java性能之synchronized锁的优化
+https://www.cnblogs.com/sevencutekk/archive/2019/09/21/11563367.html
+
+
+synchronized是基于底层操作系统的Mutex Lock实现的
+每次获取和释放锁都会带来用户态和内核态的切换，从而增加系统的性能开销
+
+
+JDK 1.6，Java对synchronized同步锁做了充分的优化，甚至在某些场景下，它的性能已经超越了Lock同步锁
+
+
+-----------------------------------------------------------
+
+
+
+
+
+
+
+--------------------------------------------------------
+
+源码
+public class ArrayBlockingQueue<E> extends AbstractQueue<E>
+        implements BlockingQueue<E>,
+
+
+
+add（）
+
+offer(E e)
+
+put(E e)
+
+没看到有内部数组大小扩容的方法，没看到在具体位置添加、删除的方法
+
+队列的指针，都是内部维护    putIndex 先动 ，takeIndex 跟在后面  ， putIndex后面都有值 ， takeIndex 后面都有空位置，以此循环转圈 ， 
+
+putIndex 赶上 takeIndex 说明数组满了，notFull.await() ， 阻塞 ， 只能 ++takeIndex 往前先动   notFull.signal()
+
+takeIndex 赶上  putIndex 说明数组为空  notEmpty.await() ，阻塞  ， 只能  ++ putIndex 往前先动  notEmpty.signal()
+
+
+
+
+
+   添加元素的位置     if (++putIndex == items.length)
+						 putIndex = 0;
+
+
+   读取元素的位置     if (++takeIndex == items.length)
+							takeIndex = 0;
+			
+			
+			
+			
+			
+	private E dequeue() {
+        // assert lock.getHoldCount() == 1;
+        // assert items[takeIndex] != null;
+        final Object[] items = this.items;
+        @SuppressWarnings("unchecked")
+        E x = (E) items[takeIndex];
+        items[takeIndex] = null;
+        if (++takeIndex == items.length)
+            takeIndex = 0;
+        count--;
+        if (itrs != null)
+            itrs.elementDequeued();
+        notFull.signal();
+        return x;
+    }		
+	
+	
+	
+	    private void enqueue(E x) {
+        // assert lock.getHoldCount() == 1;
+        // assert items[putIndex] == null;
+        final Object[] items = this.items;
+        items[putIndex] = x;
+        if (++putIndex == items.length)
+            putIndex = 0;
+        count++;
+        notEmpty.signal();
+    }
+			
+			
+------------------------------------------------------------
+
+
+Semaphore  信号量			
+
+https://blog.csdn.net/heroqiang/article/details/79822250
+Semaphore源码解析
+
+https://www.cnblogs.com/doit8791/p/9163634.html
+
+
+        /**
+         * The thread that enqueued this node.  Initialized on
+         * construction and nulled out after use.
+         */
+        volatile Thread thread;
+		
+		
+		一个node对象代表一个线程  thread 表示使当前node等待的线程，就是队列中它的前一个node
+			
+		当这个成为head时，	thread = null
+			
+	    private void setHead(Node node) {
+        head = node;
+        node.thread = null;
+        node.prev = null;
+    }		
+			
+			
+唤醒后继节点的意思是， 唤醒让它去竞争 获取锁（这里是令牌）
+			
+			
+acquire()	doAcquireSharedInterruptibly(arg)
+			
+			
+-----------------------------------------------------------------
+
+ReentrantReadWriteLock
+
+https://www.cnblogs.com/xiaoxi/p/9140541.html
+
+
+static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }    & 运算，截取C 的 右边16 位， 右边16位记录的时读锁的数量  ， 二进制同时为 1 ，才是1
+
+& 运算
+https://blog.csdn.net/qq_35114086/article/details/70173329
+
+
+
+
+
+----------------------------------------------------------------------
+
+CountDownLatch
+
+https://www.jianshu.com/p/ddcc8aea4030
+
+countDown()   status - 1
+
+重写
+tryReleaseShared(arg)     status是否为零
+
+
+所有调了 await（），的线程都加到一个队列了里， aqs  自旋直到  status 为零  并且 为header 时 ，往下执行
+
+public void await() throws InterruptedException {
+        sync.acquireSharedInterruptibly(1);
+    }
+
+--------------------------------------------------------------
+
+
+CyclicBarrier
+
+
+ public CyclicBarrier(int parties, Runnable barrierAction) {
+
+
+当凑够 parties 个 线程 执行CyclicBarrier.await()时  ， await不再阻塞，并且执行 barrierAction 里面的动作
+
+
+
+
+-------------------------------------------------------------
+
+线程池
+
+
+Executors  获取线程池 
+
+
+ThreadPoolExecutor
+
+核心代码
+
+execute(Runnable command)
+
+
+
+-------------------------------------------------------------------------
+
+Collections 把集合包装成线程安全
+
+装饰模式，给原来的方法外用了锁
+
+
+public static <K, V> Map<K, V> synchronizedMap(Map<K, V> var0) {
+        return new Collections.SynchronizedMap(var0);
+    }
+
+
+public V get(Object var1) {
+            Object var2 = this.mutex;
+            synchronized(this.mutex) {
+                return this.m.get(var1);
+            }
+        }
+
+
+
+ConcurrentLinkedQueue
+
+并发场景下性能最好的队列
+
+
+public boolean offer(E e) {
+        checkNotNull(e);
+        final Node<E> newNode = new Node<E>(e);
+
+        for (Node<E> t = tail, p = t;;) {    //jianfeng :　在　循环里面　　，　t　代表的是tail的引用，本线程或者其他线程　执行casTail(t, newNode)　后会变；　
+			Node<E> q = p.next;　　　　　　　//而　p在循环里　，如果没有被赋值的话还是保持 原来的 tail 的引用
+            if (q == null) {
+                // p is last node
+                if (p.casNext(null, newNode)) {
+                    // Successful CAS is the linearization point
+                    // for e to become an element of this queue,
+                    // and for newNode to become "live".
+                    if (p != t) // hop two nodes at a time
+                        casTail(t, newNode);  // Failure is OK.
+                    return true;
+                }
+                // Lost CAS race to another thread; re-read next
+            }
+            else if (p == q)    //jianfeng : tail节点被废弃，next指向了自己 ， 见书本
+                // We have fallen off list.  If tail is unchanged, it
+                // will also be off-list, in which case we need to
+                // jump to head, from which all live nodes are always
+                // reachable.  Else the new tail is a better bet.
+                p = (t != (t = tail)) ? t : head;
+            else
+                // Check for tail updates after two hops.
+                p = (p != t && t != (t = tail)) ? t : q;      //jianfeng : 1 、并发场景下，tail 已改变 ， 此时 p 赋值为 t，即最新的tail， 335行 (p != t) 不会成立，只是添加一个node在末尾，tail 进行改变
+        }														// 2 、 如果 tail 没改变，p 赋值为q ， 即链表最后的那个node（不是tail），而 t 还是代表 tail，335行 (p != t) 成立，把tail 设置成最后的那个node
+    }
+
+-------------------------------------------------------------------
+
+CopyOnWriteArrayList
+
+读数据的方法不加锁，写数据的方法加锁
+
+
+----------------------------------------------
+
+BlockingQueue  
+
+阻塞队列  ， 空时会让取得方法等待，满的时候会让添加的方法等待
+
+
+-------------------------------------------------
+
+
+ThreadLocal
+
+
+
+		

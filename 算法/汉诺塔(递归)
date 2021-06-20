@@ -1,0 +1,132 @@
+
+
+ 递归  递归的方法要构成一个完整的过程    比如 汉诺塔  一个关于n的过程   等于  一个关于n-1的过程 、 打印 、再一个关于n-1的过程  三部分
+
+
+汉诺塔   ： 
+
+ 柱子  A  B  C    ,  A柱子从下到上  放着1、2 、 3 ···· n个环 ， 下面的环比上面的大  ；
+ 
+ 要求把 环 全部 移动 到 C 柱子上，并且整个移动的过程 每个柱子上，都保持 下面的环比上面的大；
+ 
+ 
+ 
+ 思路 ： A上一共n个环 ，可以看作  先把n-1个环移动到 B ， 环n 移到 C ， 然后把 剩下的n-1 个环  从 B  移动到C ，共三步
+ 
+
+
+
+   n  A --> C
+
+
+	1
+
+	2
+
+	3
+
+	4
+
+	5
+
+	A  		B   	C
+
+
+
+1、 利用C  把 n-1 移动 A 到 B      n = n-1    A = A   B C 交换     
+
+
+			1
+
+			2
+
+			3
+
+			4
+
+	5
+
+	A  		B   	C
+	
+	
+2、把 n 移动到 C
+	
+	
+			1
+
+			2
+
+			3
+
+			4
+
+					5
+
+	A  		B   	C	
+	
+	
+	
+3、	利用A  把n-1 从B移动到C
+	
+
+
+
+
+
+    /*
+    * A   环在的柱子
+    * B  过渡的柱子
+    * C  要移到的柱子
+    * */
+    public void move(int n, String A , String B , String C){
+
+        if(n == 2){
+            System.out.println("环"+ (n-1) +"从柱子" + A +"--->柱子" + B);
+            System.out.println("环"+ n +"从柱子" + A +"--->柱子" +C);
+            System.out.println("环"+ (n-1) +"从柱子" + B +"--->柱子" + C);
+            return;
+        }
+		
+        move(n-1,  A , C, B);
+        System.out.println("环"+ n +"从柱子" + A +"--->柱子" + C);
+        move(n-1,  B , A, C);
+    }
+
+    public static void main(String[] args) {
+        String A = "A";
+        String B = "B";
+        String C = "C";
+        Hanoi hanoi = new Hanoi();
+        hanoi.move(3,A,B,C);
+    }
+}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

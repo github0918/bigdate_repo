@@ -1,0 +1,361 @@
+
+
+基本概念
+
+
+
+	图   G(V,E)   G 表示一个图  v 表示顶点的集合  G 表示边的集合
+
+
+	图中任意连个顶点之间都可能有关系 ， 用边表示
+
+	有向图
+
+	连通图
+
+	图的权
+
+	图的度
+	
+	
+
+图的存储
+
+一个一维数组存储图的顶点
+
+一个二维数组（邻接矩阵）存储图的边  见ppt文档
+
+
+
+邻接矩阵 的 点  arc[i][j] = 1 表示  有一条边 从顶点 i 指向 顶点j ， 0 表示没有指向
+
+i 是矩阵的第几行  
+
+
+带权邻接矩阵    有指向的 放权值  ， 没有的无穷大
+
+
+
+	图  增、删顶点  ， 修改二维数组 
+
+	某一顶点的 出度   所对应行的值之和
+
+	某一顶点的 入读   所对应列的值之和
+
+·······················································································································
+
+
+图的遍历    从某个顶底开始，沿着边， 把图所有的顶点走一遍    
+
+
+
+图的深度优先遍历和广度优先遍历
+
+https://blog.csdn.net/wgx571859177/article/details/79477514
+
+
+转换成矩阵
+
+
+	1	 2	  3    4     5	   6
+  
+
+1 	0	 1	  1    1     0     0
+
+
+2	1	 0    0    0     1     0
+
+3   1    0    0    1     1     1
+
+4   1    0    1    0     0     1
+
+5   0    1    1    0     0     1
+
+6   0    0    1    1     1     0
+
+
+
+
+代码见  Graph.java
+
+
+    /**
+     * 图的深度优先遍历算法   深度优先指的是 从算法递归的执行，节点的打印顺序来描述的
+	 
+     *
+     *  直观的理解是  传入一个节点，把它所有相连的节点都打印出来，每个节点打印时，递归打印它相连的节点，打印过的就不打印
+     * 
+     *   w 为 i 的 下一个节点   递归   depthFirstSearch 这个函数执行结束代表  与 i 的所有相连节点 已经 遍历完
+     */
+    private void depthFirstSearch(int i){
+        isVisited[i] = true;
+        int w = getFirstNeighbor(i);//  在i 行 找到了 w  ，找到第一个相连的节点
+        while(w!=-1){        //找不到相连的节点
+            if(!isVisited[w]){    //节点 已经遍历过
+                //需要遍历该顶点
+                System.out.println("访问到了："+w+"顶点");
+                depthFirstSearch(w);
+            }
+            w = getNextNeighbor(i, w);//    在i 行 从w开始找
+        }
+    }
+	
+	
+	
+	
+	
+	
+	 /**
+     * 实现广度优先遍历   其实就是非递归 ， 用队列进行实现
+	 
+		某个节点开始 A ， 打印  ，放入队列queue ，  queue 取出第一个，此时是A ， 遍历所有的 相连节点 ， 如果没有打印过的 ， 打印，放入queue  ··················
+	 
+	 
+     * @param i
+     */
+    private void broadFirstSearch(int i) {
+        int u,w;
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        System.out.println("访问到："+i+"顶点");
+        isVisited[i] = true;
+        queue.add(i);//第一次把v0加到队列
+        while(!queue.isEmpty()){
+            u = (Integer)(queue.removeFirst()).intValue();
+            w = getFirstNeighbor(u);
+            while(w!=-1){
+                if(!isVisited[w]){
+                    System.out.println("访问到了："+w+"顶点");
+                    isVisited[w] = true;
+                    queue.add(w);
+                }
+                w = getNextNeighbor(u, w);
+            }
+        }
+    }
+
+
+·························································································································
+
+
+求无向连通图的最小生成树
+
+
+
+
+https://www.bilibili.com/video/av52374548
+
+
+注意   每次  是从剩下的顶点 V-U集合 中 找一个 到  在建生成树 U  的  权值最小的顶点， 加入到U，直到全部加完
+
+
+
+普里姆算法图解
+
+https://jingyan.baidu.com/article/9113f81b6707c52b3214c794.html
+
+
+查找一个顶点在U={v1}集合中， 另一个顶点在V-U集合中的最小权值，如下图，在红线相交的线上找最小值。
+
+
+看 ppt 的矩阵
+
+
+
+/**
+     * prim 普里姆算法
+     */
+    public void prim(){
+        int [] lowcost = new int[vertexSize];//为0表示已经获取最小权值，存放 剩下的顶点 V-U集合中  每个顶点 到  在建生成树 U   的 最小距离
+        int [] adjvex = new int[vertexSize];// 记录 lowcost 的值，对应的在 U 中的结点
+        int min,minId,sum = 0;
+        for(int i = 1;i<vertexSize;i++){
+            lowcost[i] = matrix[0][i];
+        }
+        for(int i = 1;i<vertexSize;i++){   // 每次移动一个最小的顶点 ，共需要执行  vertexSize - 1 次
+            min = MAX_WEIGHT;
+            minId = 0;
+            for(int j = 1;j<vertexSize;j++){
+                if(lowcost[j]<min&&lowcost[j]>0){
+                    min = lowcost[j];  // 从剩下的顶点 V-U集合 中 找一个 到  在建生成树 U  的  权值最小的顶点
+                    minId = j;
+                }
+            }
+            System.out.println("顶点："+adjvex[minId]+"权值："+min);
+            sum+=min;
+            lowcost[minId] = 0;  //表示 该顶点已经加入到 U
+            for(int j = 1;j<vertexSize;j++){ // 移动一个顶点后， 刷新距离数组 lowcost
+                if(lowcost[j]!=0&&matrix[minId][j]<lowcost[j]){
+                    lowcost[j] = matrix[minId][j];  //  表示  节点j  到  节点 minId 的权值更小  ，跟到其他已经加入U的权值相比
+                    adjvex[j] = minId;     //  记录 是 lowcost[j]  对应的在 U 中的结点
+                }
+            }
+        }
+        System.out.println("最小生成树权值和:"+sum);
+    }
+
+
+
+
+-----------------------------------------------------------------------------
+
+
+克鲁斯卡尔算法
+
+
+1、边 按照 权值从小到大排序 
+
+2、 将边按权值从小到大的顺序添加到图中，保证添加的过程中不会形成环，出现回环就放弃这条边
+
+   因为出现回环，就是有一条边是多余，可去掉的
+
+此时就生成了最小生成树。这是一种贪心策略。
+
+
+
+
+
+
+
+
+ 5 0 0 0 0 7 0 3 0 
+
+
+
+ 0   5   
+
+ 5   7
+
+ 5   3
+ 
+ 
+ 
+ 
+     public void miniSpanTreeKruskal(){
+        int m,n,sum=0;
+        int[] parent = new int[edgeSize];//神奇的数组，下标为起点，值为终点
+        for(int i = 0 ;i<edgeSize;i++){
+            parent[i] = 0;
+        }
+        for(int i = 0;i<edgeSize;i++){
+            n = find(parent,edges[i].begin);
+            m = find(parent,edges[i].end);
+            if(n!=m){
+                parent[n] = m;  // 每添加一条边 L 后  , parent[n] = m 代表从已添加的节点中 连接 L 的 远端 的 边，该边把分支闭环
+                System.out.println("起始顶点："+edges[i].begin+"---结束顶点："+edges[i].end+"~权值："+edges[i].weight);
+                sum+=edges[i].weight;
+            }else{
+                System.out.println("第"+i+"条边回环了");
+            }
+        }
+        System.out.println("sum:"+sum);
+    }
+
+
+    /*将神奇数组进行查询获取   非回环的值
+     *
+     *  
+     * 
+     */
+    public int find(int[] parent,int f){
+        while(parent[f]>0){  //会不会死循环 ，不会  parent[n] = m; 在 find 后面 ，赋值最多也会比edgeSize少一次
+            System.out.println("找到起点"+f);
+            f = parent[f];
+            System.out.println("找到终点:"+f);
+        }
+        return f;
+    }
+
+··············································································································
+
+
+
+最短路径   迪杰斯特拉（Dijkstra）算法
+
+从原点开始， 每遍历一个点，就比较，记录原点到这个点最短的距离     
+
+
+见ppt文档 矩阵
+
+0  1  2  3  4  5   6   7  8
+
+
+0  1  5  #  #  #   #   #  #    shortTablePath[]
+
+
+t  t  f  f  f  f   f   f  f     isgetPath[k]
+
+
+
+k = 1
+
+
+min = 1
+
+
+
+
+    /**
+     * 获取一个图的最短路径
+     */
+    public void shortestPathDijstra(Graph graph) {
+        int min;
+        int k = 0;// 记录下标
+        boolean isgetPath[] = new boolean[MAXVEX];
+        for (int v = 0; v < graph.getVertexSize(); v++) {
+            shortTablePath[v] = graph.getMatrix()[0][v];// 获取v0这一行的权值数组
+        }
+        shortTablePath[0] = 0;
+        isgetPath[0] = true;
+        for (int v = 1; v < graph.getVertexSize(); v++) {
+            min = MAXWEIGHT;
+            for (int w = 0; w < graph.getVertexSize(); w++) {
+                if (!isgetPath[w] && shortTablePath[w] < min) {  // 最小值这个点，这个点到原点的最短路径就是 min ，因为其它至更大的点，绕到这个点，路径之和肯定比min还大
+                    k = w;
+                    min = shortTablePath[w];
+                }
+            }
+            isgetPath[k] = true;
+            for (int j = 0; j < graph.getVertexSize(); j++) {
+                if(!isgetPath[j]&&(min+graph.getMatrix()[k][j]<shortTablePath[j])){
+                    shortTablePath[j] = min + graph.getMatrix()[k][j];  //比如确定了 V1 , 更新了相连个点到原点的最小距离
+                }
+            }
+        }
+        for(int i = 0;i<shortTablePath.length;i++){
+            System.out.println("V0到V"+i+"的最短路径为:"+shortTablePath[i]+"\n");
+        }
+
+    }
+
+
+
+···············································································
+
+
+
+拓扑排序
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
