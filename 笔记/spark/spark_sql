@@ -1,0 +1,219 @@
+
+
+Spark SQL是Spark用来处理结构化数据的一个模块, 
+
+有多种方式去使用Spark SQL，包括SQL、DataFrames API和Datasets API。但无论是哪种API或者是编程语言，
+
+它们都是基于同样的执行引擎，
+
+
+
+Hive，它是将Hive SQL转换成MapReduce然后提交到集群中去执行，大大简化了编写MapReduce程序的复杂性，
+
+由于MapReduce这种计算模型执行效率比较慢，所以Spark SQL应运而生，它是将Spark SQL转换成RDD，然后提交到集群中去运行，执行效率非常快！
+
+-----------------------------------------------------------------------------------
+
+
+DataFrame
+
+
+
+DataFrame和RDD的区别
+
+
+左侧的RDD[Person]虽然以Person为类型参数，但Spark框架本身不了解Person类的内部结构
+
+右侧的DataFrame却提供了详细的结构信息，使得Spark SQL可以清楚地知道该数据集中包含哪些列，
+每列的名称和类型各是什么，DataFrame多了数据的结构信息，即schema
+
+
+DataFrame通过引入schema和off-heap（不在堆里面的内存，指的是除了不在堆的内存，使用操作系统上的内存），
+
+解决了RDD的缺点,Spark通过schame就能够读懂数据,因此在通信和IO时就只需要序列化和反序列化数据,而结构的部分就可以省略了；
+
+通过off-heap引入，可以快速的操作数据，避免大量的GC。
+
+但是却丢了RDD的优点，DataFrame不是类型安全的,API也不是面向对象风格的。
+
+
+
+
+
+SparkSQL中SQL、DataFrame和DataSet方式的静态类型安全和运行时类型安全
+
+https://blog.csdn.net/xiaoduan_/article/details/79751755
+
+
+
+-----------------------------------------------------------------------------
+
+sc.textFile("hdfs://node01:8020/person.txt").flatMap(line=>line.split(" "))
+
+
+
+
+DataFrame  SQL风格语法
+
+
+case class Person(id:Int,name:String,age:Int)
+
+
+  def main(args: Array[String]): Unit = {
+    //1:创建一个SparkSession对象
+    val spark = SparkSession
+      .builder()
+      .appName("Spark SQL basic example")
+      .master("local")
+      .getOrCreate()
+    //2:读取本地文件
+    val df: Dataset[String] = spark.read.textFile("D:\\testdata\\person.txt")
+    //3:打印信息
+   // df.show()
+
+    // 解决 Unable to find encoder for type stored in a Dataset
+    import spark.implicits._
+    //映射成, DataFrame
+    val line:Dataset[Array[String]] = df.map(x=>x.split(" "))
+    var person:Dataset[Person]=line.map(x=>Person(x(0).toInt,x(1),x(2).toInt))
+    val persondf:DataFrame = person.toDF()
+    //映射成表
+    persondf.createOrReplaceTempView("Person_tb")
+
+   //println(spark.sql("select * from Person_tb").show())　
+    println(spark.sql("select * from Person_tb t where t.age > 20").show()) //注意输入法
+    println(spark.sql("desc Person_tb").show())
+    //4:释放资源
+    spark.close()
+  }
+
+
+
+--------------------------------------------------------------------------------------
+dataset
+官网api
+http://spark.apache.org/docs/2.2.0/api/scala/index.html#org.apache.spark.sql.Dataset
+
+
+//定义一个样例类
+case class Person(name:String,age:Long)
+//准备一个集合,集合里面存放Person对象
+val data = List(Person("zhangsan",20),Person("lisi",22))
+//将集合转换为Dataset
+val ds = data.toDS
+
+
+
+
+---------------------------------------------------------------------
+
+从mysql中读取数据 , 更多的连接方式参考官网  https://spark.apache.org/docs/latest/sql-getting-started.html   
+
+过程
+SparkSession.read --> DataFrame    DataFrame.write写回去mysql
+
+
+  def main(args: Array[String]): Unit = {
+    //创建sparksession对象
+    val spark:SparkSession = SparkSession.builder().appName("getdatafrommysql").master("local").getOrCreate()
+    //SparkContext 设置日志级别
+    val sc:SparkContext = spark.sparkContext
+    sc.setLogLevel("WARN")
+    //
+    val jdbcDF = spark.read
+      .format("jdbc")
+      .option("url", "jdbc:mysql://node01:3306/userdb")
+      .option("dbtable", "emp")
+      .option("user", "root")
+      .option("password", "123456")
+      .load()
+    jdbcDF.show();
+    spark.stop();
+  }
+
+---------------------------------------------------------------------------
+数据导入到mysql
+
+object Data2MysqlWithScala {
+  def main(args: Array[String]): Unit = {
+    //1:创建一个SparkSession对象
+    val spark = SparkSession
+      .builder()
+      .appName("Spark SQL basic example")
+      .master("local")
+      .getOrCreate()
+    //2:从SparkSession中获取SparkContext对象
+    val sc: SparkContext = spark.sparkContext
+    sc.setLogLevel("WARN")
+    //3:读取文件
+    val lines: RDD[String] = sc.textFile("D:\\testdata\\emp.txt")
+    //4:将每一行数据切分
+    val arrRDD: RDD[Array[String]] = lines.map(line=>line.split('|'))    // 要使用单引号
+    //5:将RDD与Student进行关联
+    val studentRDD: RDD[Student] = arrRDD.map(line=>Emp(Integer.parseInt(line(0)),line(1),line(2),Integer.parseInt(line(3)),line(4),line(5),line(6),Integer.parseInt(line(7))))
+    //导入隐式转换
+    import spark.implicits._
+    //6:将RDD转换成DataFrame
+    val studentDF: DataFrame = studentRDD.toDF()
+    //7:将DataFrame注册成一张表
+    studentDF.createOrReplaceTempView("emptb")
+    //8:操作sql
+    val resultDF: DataFrame = spark.sql("select * from emptb")
+	
+    resultDF.write.mode(SaveMode.Append).format("jdbc")   //要指定model
+      .option("url", "jdbc:mysql://node01:3306/userdb")
+      .option("dbtable", "emp")
+      .option("user", "root")
+      .option("password", "123456")
+      .save()
+    //释放资源
+    spark.stop()
+  }
+}
+case class Student(id:Int,username:String,age:Int)
+
+
+
+
+Spark SQL将数据写入Mysql表的一些坑
+https://blog.csdn.net/dai451954706/article/details/52840011
+
+
+在scala中使用split（）方法中的单引号和双引号有什么区别？
+https://cloud.tencent.com/developer/ask/212217
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
