@@ -1,0 +1,129 @@
+
+
+
+原文 https://github.com/Dang-h/HiveSQL
+
+
+
+常用函数
+
+NVL( value，default_value) 给null默认值
+
+	SELECT comm, nvl(comm, -1) null_comm
+	FROM emp
+
+case 。。when 。。 THEN 。 ELSE 。 END
+
+	SELECT dept_id,
+		   SUM(CASE sex WHEN '男' THEN 1 ELSE 0 END) male_count,
+		   SUM(CASE sex WHEN '女' THEN 1 ELSE 0 END) female_count
+	FROM emp_sex
+	GROUP BY dept_id;
+
+
+	CASE sex
+	WHEN '1' THEN '男'
+	WHEN '2' THEN '女'
+	ELSE '其他' END
+	
+-- 行转列 、 列转行  原文 https://www.cnblogs.com/lucas-zhao/p/12023193.html
+
+	行转列  多行拼成一列  concat_ws(',',collect_set(column))
+	
+	列转行 某一列拆成多行  select deptno,name from emp3 lateral view explode(names) tmp_tbl as name;
+
+	/*
+	 相关函数：
+		CONCAT(string A/col, string B/col…)：返回输入字符串连接后的结果，支持任意个输入字符
+		CONCAT_WS(separator, [string | array(string)]+)：返回由分隔符分隔的字符串的连接
+		COLLECT_SET(col)：返回一组消除了重复元素的对象
+	 */	
+
+	+-------------------+----------------------------+-------------------------+--+
+    | person_info.name  | person_info.constellation  | person_info.blood_type  |
+    +-------------------+----------------------------+-------------------------+--+
+    | 孙悟空             | 白羊座                     | A                       |
+    | 大海               | 射手座                     | A                       |
+    | 宋宋               | 白羊座                     | B                       |
+    | 猪八戒             | 白羊座                     | A                       |
+    | 凤姐               | 射手座                     | A                       |
+    +-------------------+----------------------------+-------------------------+-
+	
+	
+		SELECT t1.base, CONCAT_WS('|', collect_set(t1.name)) name
+	FROM (SELECT name, CONCAT(constellation, ",", blood_type) base
+		  FROM person_info) t1
+	GROUP BY t1.base;
+	
+分类合并   collect_list/set 。。group by
+
+	SELECT category_name, CONCAT_WS('|', collect_list(movie)) movie
+	FROM movie_info LATERAL VIEW explode(category) table_tmp AS category_name
+	GROUP BY category_name;	
+
+
+窗口函数 
+
+https://blog.csdn.net/weixin_38750084/article/details/82779910
+
+在SQL处理中，窗口函数都是最后一步执行，在order by和limit 之前执行
+
+每一条数据，窗口函数都有一个输出结果
+
+跟group by 没什么关系，窗口函数是在最后执行
+
+1 聚合函数+over
+
+select name,count(*) over ()
+from t_window
+where substring(orderdate,1,7) = '2015-04'
+
+count(*) over ()  全局聚合，总的记录数，这里满足 where 的是5条记录；
+每一条name记录，对应一次 窗口函数输出
+
+2 partition by    Over之前的函数在每一个分组之内进行，没有order by子句时，是分组内的聚合
+
+
+3、order by  没有order by子句时，是分组内所有的聚合，有的话，是默认分组内第一行到当前记录的聚合
+
+4 window子句
+
+preceding   
+following
+current row
+unbounded preceding
+unbounded following
+
+
+sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING   and current row) as sample5, 
+
+
+5  ntile(3) over(partition by name order by cost )   不支持 window子句   想要每位顾客购买金额前1/3的交易记录
+
+返回的是当前记录 所在的分片
+
+分片不均匀时，先分到前面的分片
+
+6  row_number   1  2  3  4  5  6
+   rank         1  2  2  4  5  6
+   dense_rank   1  2  2  3  4  5
+
+7  LAG和LEAD
+
+分组内 取当前行，前面1行的 orderdate ， 默认值 1900-01-01  查看顾客上次的购买时间
+lag(orderdate,1,'1900-01-01') over(partition by name order by orderdate ) as time1,
+
+lead 相反，去后面第几行
+
+8 first_value和last_value
+
+first_value取分组内排序后，截止到当前行，第一个值
+last_value  。。。。最后一个值
+	
+	
+	
+	查询在2017年4月份购买过的顾客及总人数
+	查询顾客的购买明细及月购买总额
+	上述的场景, 将每个顾客的cost按照日期进行累加
+	查询每个顾客上次的购买时间
+	查询前20%时间的订单信息

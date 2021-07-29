@@ -1,0 +1,65 @@
+
+
+
+
+
+1  MapTask运行机制详解以及Map任务的并行度
+
+InputFormat （默认TextInputFormat）  getSplits 对目录中的文件进行切分 splits，
+有多少个split就对应启动多少个MapTask。split与block的对应关系默认是一对一
+
+每个 MapTask 中 RecordReader对象（默认LineRecordReader）进行读取 ，以\n作为分隔符
+返回<key，value>，key首字符偏移值，value表示文本内容
+
+获得<key，value>，进入用户的mapper类的map函数，RecordReader读取一行这里调用一次
+
+context.write 进行collect 结果数据收集，在collec中 默认使用HashPartitioner进行分区处理
+默认对key hash后再以reduce task数量取模
+
+上面的结果写入内存的 环形缓冲区  <key，value>被序列化成字节数组写入
+缓存区默认100M ，达到80%就溢写spill到磁盘的临时文件	
+
+溢写线程启动后，需要对这80MB空间内的key做排序(Sort)，如果有Combiner，也执行，Combiner适用累加，最大值等场景
+
+当整个数据处理结束之后开始对磁盘中的临时文件进行merge合并，
+因为最终的文件只有一个，写入磁盘，并且为这个文件提供了一个索引文件，以记录每个reduce对应数据的偏移量
+
+
+mapTask的一些配置配置项
+mapreduce.task.io.sort.mb	100  环形缓冲区的大小
+mapreduce.map.sort.spill.percent	0.80
+mapreduce.cluster.local.dir	${hadoop.tmp.dir}/mapred/local
+mapreduce.task.io.sort.factor	10
+
+2、 ReduceTask 工作机制以及reduceTask的并行度
+
+ Reduce大致分为copy、sort、reduce三个阶段
+ 
+ copy  Reduce进程启动一些数据copy线程(Fetcher)，通过HTTP方式请求maptask获取属于自己的文件
+ 
+ Merge  不同map端copy来的数值，放到缓冲区，达到一定值时，溢写到磁盘，最后把磁盘的文件进行合并
+ 
+ sort  合并成的大文件同时，还要进行一次排序
+ 
+ reduce  对排序后的键值对调用reduce方法，键相等的键值对 调用一次reduce方法
+ 
+ 
+ 3、MapReduce  shuffle 
+ 
+ 从Map产生输出开始到Reduce取得数据作为输入之前的过程称作shuffle
+ 
+1).Collect阶段：将MapTask的结果输出到默认大小为100M的环形缓冲区，
+   保存的是key/value，Partition分区信息等。
+   
+2).Spill阶段：当内存中的数据量达到一定的阀值的时候，就会将数据写入本地磁盘，
+     在将数据写入磁盘之前需要对数据进行一次排序的操作，如果配置了combiner，还会将有相同分区号和key的数据进行排序。
+	 
+3).Merge阶段：把所有溢出的临时文件进行一次合并操作，以确保一个MapTask最终只产生一个中间数据文件。
+
+4).Copy阶段：ReduceTask启动Fetcher线程到已经完成MapTask的节点上复制一份属于自己的数据，
+  这些数据默认会保存在内存的缓冲区中，当内存的缓冲区达到一定的阀值的时候，就会将数据写到磁盘之上。
+  
+5).Merge阶段：在ReduceTask远程复制数据的同时，会在后台开启两个线程对内存到本地的数据文件进行合并操作。
+
+6).Sort阶段：在对数据进行合并的同时，会进行排序操作，由于MapTask阶段已经对数据进行了局部的排序，
+  ReduceTask只需保证Copy的数据的最终整体有效性即可。
